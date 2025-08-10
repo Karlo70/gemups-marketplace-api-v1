@@ -1,0 +1,4504 @@
+{
+	"info": {
+		"_postman_id": "a7aa9e8a-1f4e-40a7-8ba8-ca1849480c63",
+		"name": "Automely-Ai",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "40740294",
+		"_collection_link": "https://iinvsite.postman.co/workspace/Automely-Ai~ad99cda7-edaf-4d0e-ae97-98561ec0c0f8/collection/40740294-a7aa9e8a-1f4e-40a7-8ba8-ca1849480c63?action=share&source=collection_link&creator=40740294"
+	},
+	"item": [
+		{
+			"name": "super admin",
+			"item": [
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Fixed syntax to access token property in response body\r",
+											"var responseBody = pm.response.json();\r",
+											"\r",
+											"pm.globals.set(\"super_admin_token\", responseBody?.response?.extra.access_token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "arham-ahmed@iinv.tech",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "roles[0]",
+											"value": "admin",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "roles[1]",
+											"value": "customer",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "roles[3]",
+											"value": "super_admin",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}auth/login"
+							},
+							"response": []
+						},
+						{
+							"name": "forgot-password",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "superadmin@example.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}auth/forget-password"
+							},
+							"response": []
+						},
+						{
+							"name": "verify-otp-code",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "danish@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "otp_code",
+											"value": "000000",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}auth/verify-otp"
+							},
+							"response": []
+						},
+						{
+							"name": "reset-password",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "danish@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "confirm_password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "otp_code",
+											"value": "000000",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}auth/reset-password"
+							},
+							"response": []
+						},
+						{
+							"name": "logout",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": "{{base_url}}{{version}}auth/logout"
+							},
+							"response": []
+						},
+						{
+							"name": "me",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}auth/me"
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "user",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "first_name",
+											"value": "bilal",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "khan",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "bilal@iinv.tech",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "confirm_password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "technician",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "organization",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "role",
+											"value": "admin",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/create"
+							},
+							"response": []
+						},
+						{
+							"name": "change-password",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "new_password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "confirm_password",
+											"value": "123123",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/change-password"
+							},
+							"response": []
+						},
+						{
+							"name": "update-user",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "first_name",
+											"value": "syed Hasnain 01",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "rehan",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "danish@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "admin",
+											"description": "technician, organization, admin",
+											"type": "text"
+										},
+										{
+											"key": "phone_no",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "company_type_id",
+											"value": "9cefc6d5-1424-495b-b8e4-599979f98309",
+											"type": "text"
+										},
+										{
+											"key": "country_id",
+											"value": "ee63455a-7632-4b1a-be78-c86fcff6b572",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}users/update/:id",
+									"host": [
+										"{{base_url}}{{version}}users"
+									],
+									"path": [
+										"update",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "c4cdeca6-4f16-4055-a076-d5373146437a"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "manage-status",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "status",
+											"value": "inactive",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}users/manage-status/:id",
+									"host": [
+										"{{base_url}}{{version}}users"
+									],
+									"path": [
+										"manage-status",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "d06e59ba-8c97-4918-8893-fd0bc12e66cc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete-user",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": "{{base_url}}{{version}}users/delete"
+							},
+							"response": []
+						},
+						{
+							"name": "get-all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}users?page=1&per_page=10&role=customer&status=active",
+									"host": [
+										"{{base_url}}{{version}}users"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "per_page",
+											"value": "10"
+										},
+										{
+											"key": "role",
+											"value": "customer",
+											"description": "admin OR transporter OR organization"
+										},
+										{
+											"key": "status",
+											"value": "active"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-one",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}users/:id",
+									"host": [
+										"{{base_url}}{{version}}users"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "upload-profile-picture",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/danis/OneDrive/Pictures/Screenshots/Screenshot (4).png"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/upload/profile-picture"
+							},
+							"response": []
+						},
+						{
+							"name": "update-time-zone",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "time_zone",
+											"value": "asia/karachi",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/update/timezone"
+							},
+							"response": []
+						},
+						{
+							"name": "add-device-token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "device_token",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/add-device-token"
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "leads",
+					"item": [
+						{
+							"name": "get-all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}lead?page=1&per_page=10&lead_from=facebook_lead",
+									"host": [
+										"{{base_url}}{{version}}lead"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "per_page",
+											"value": "10"
+										},
+										{
+											"key": "lead_from",
+											"value": "facebook_lead"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "admin-create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "{{$randomFullName}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "{{$randomEmail}}",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "{{$randomPhoneNumber}}",
+											"type": "text"
+										},
+										{
+											"key": "message",
+											"value": "{{$randomLoremLines}}",
+											"type": "text"
+										},
+										{
+											"key": "company_name",
+											"value": "IINV",
+											"type": "text"
+										},
+										{
+											"key": "lead_from",
+											"value": "website",
+											"type": "text"
+										},
+										{
+											"key": "industry",
+											"value": "",
+											"description": "Software / IT Services, Logistics & Transportation, Healthcare & Medical, Education & E-Learning, Finance & Banking, Retail & E-commerce, Manufacturing, Construction & Real Estate, Telecommunications, Automotive, Hospitality & Tourism, Media & Entertainment, Energy & Utilities, Legal Services, Marketing & Advertising, Non-Profit & NGOs, Agriculture & Farming, Government & Public Sector, Aerospace & Defense, Pharmaceuticals & Biotechnology, Food & Beverage, Fashion & Apparel, Consulting Services, Insurance, Other",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}lead/admin-add-lead"
+							},
+							"response": []
+						},
+						{
+							"name": "get-one",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}lead/:id",
+									"host": [
+										"{{base_url}}{{version}}lead"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "cbb3f447-a6ef-4b5d-881d-18e71df28374"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}lead/:id",
+									"host": [
+										"{{base_url}}{{version}}lead"
+									],
+									"path": [
+										":id"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": "",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "03a02001-e235-4c4f-8951-7442e3ddd8b6"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "dashboard",
+					"item": [
+						{
+							"name": "stats",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}admins/dashboard/stats"
+							},
+							"response": []
+						},
+						{
+							"name": "revenue",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}admins/platform-revenue-graph/2025"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "agent",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"TEST Reservation Booking Agent 11\",\r\n    \"firstMessage\": \"Hello\",\r\n    \"firstMessageMode\": \"assistant-speaks-first\",\r\n    \"transcriber\": {\r\n        \"provider\": \"openai\",\r\n        \"model\": \"gpt-4o-transcribe\",\r\n        \"language\": \"af\",\r\n        \"confidenceThreshold\": 0.7,\r\n        \"fallbackPlan\": {\r\n            \"transcribers\": [\r\n                {\r\n                    \"provider\": \"openais\",\r\n                    \"language\": \"ens\",\r\n                    \"confidenceThreshold\": 0.7,\r\n                    \"endUtteranceSilenceThreshold\": 1.0,\r\n                    \"disablePartialTranscripts\": false\r\n                }\r\n                // ,\r\n                // {\r\n                //     \"provider\": \"openai\",\r\n                //     \"language\": \"ens\",\r\n                //     \"confidenceThreshold\": 0.7,\r\n                //     \"endUtteranceSilenceThreshold\": 1.0,\r\n                //     \"disablePartialTranscripts\": false\r\n                // }\r\n            ]\r\n        }\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}{{version}}agents"
+							},
+							"response": []
+						},
+						{
+							"name": "all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}agents"
+							},
+							"response": []
+						},
+						{
+							"name": "single",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}agents/:id",
+									"host": [
+										"{{base_url}}{{version}}agents"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "10264190-3269-477d-b4bb-44e01ece683f"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Reservation Booking Agent",
+											"type": "text"
+										},
+										{
+											"key": "assistant_id",
+											"value": "aba8bf65-08f9-45a9-ab27-d5b157a53393",
+											"type": "text"
+										},
+										{
+											"key": "phone_number_id",
+											"value": "89af526d-d765-47b1-98d6-8bc5a851df40",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}agents/:id",
+									"host": [
+										"{{base_url}}{{version}}agents"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "10264190-3269-477d-b4bb-44e01ece683f"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Reservation Booking Agent",
+											"type": "text"
+										},
+										{
+											"key": "assistant_id",
+											"value": "aba8bf65-08f9-45a9-ab27-d5b157a53393",
+											"type": "text"
+										},
+										{
+											"key": "phone_number_id",
+											"value": "89af526d-d765-47b1-98d6-8bc5a851df40",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}agents/:id",
+									"host": [
+										"{{base_url}}{{version}}agents"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "10264190-3269-477d-b4bb-44e01ece683f"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "third-party-api-key",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "send-grid",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "For sending email to customer",
+											"type": "text"
+										},
+										{
+											"key": "key",
+											"value": "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",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "email",
+											"type": "text"
+										},
+										{
+											"key": "daily_limit",
+											"value": "100",
+											"type": "text"
+										},
+										{
+											"key": "use_for",
+											"value": "for_customer",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}third-party-api-key"
+							},
+							"response": []
+						},
+						{
+							"name": "all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}third-party-api-key"
+							},
+							"response": []
+						},
+						{
+							"name": "single",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}third-party-api-key/:id",
+									"host": [
+										"{{base_url}}{{version}}third-party-api-key"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "10264190-3269-477d-b4bb-44e01ece683f"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Reservation Booking Agent",
+											"type": "text"
+										},
+										{
+											"key": "assistant_id",
+											"value": "aba8bf65-08f9-45a9-ab27-d5b157a53393",
+											"type": "text"
+										},
+										{
+											"key": "phone_number_id",
+											"value": "89af526d-d765-47b1-98d6-8bc5a851df40",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}third-party-api-key/:id",
+									"host": [
+										"{{base_url}}{{version}}third-party-api-key"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "10264190-3269-477d-b4bb-44e01ece683f"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "mark-default",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}third-party-api-key/:id/mark-default",
+									"host": [
+										"{{base_url}}{{version}}third-party-api-key"
+									],
+									"path": [
+										":id",
+										"mark-default"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "3626f5db-d249-45a9-a4f0-94784ca5387d"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Reservation Booking Agent",
+											"type": "text"
+										},
+										{
+											"key": "assistant_id",
+											"value": "aba8bf65-08f9-45a9-ab27-d5b157a53393",
+											"type": "text"
+										},
+										{
+											"key": "phone_number_id",
+											"value": "89af526d-d765-47b1-98d6-8bc5a851df40",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}third-party-api-key/:id",
+									"host": [
+										"{{base_url}}{{version}}third-party-api-key"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "588e9f7f-5260-485d-92b2-b6305eb90ba2"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "model",
+					"item": [
+						{
+							"name": "create",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "TEST Reservation Booking Agent ",
+											"type": "text"
+										},
+										{
+											"key": "assistant_id",
+											"value": "aba8bf65-08f9-45a9-ab27-d5b157a53393",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "phone_number_id",
+											"value": "89af526d-d765-47b1-98d6-8bc5a851df40",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}models"
+							},
+							"response": []
+						},
+						{
+							"name": "all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}models?type=transcriber",
+									"host": [
+										"{{base_url}}{{version}}models"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "transcriber"
+										},
+										{
+											"key": "search",
+											"value": "gemini-2.0-flash-realtime-exp",
+											"disabled": true
+										},
+										{
+											"key": "provider",
+											"value": "google",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "provider",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}models/providers",
+									"host": [
+										"{{base_url}}{{version}}models"
+									],
+									"path": [
+										"providers"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "transcriber",
+											"disabled": true
+										},
+										{
+											"key": "search",
+											"value": "google",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "single",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}models/:id",
+									"host": [
+										"{{base_url}}{{version}}models"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "10264190-3269-477d-b4bb-44e01ece683f"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Reservation Booking Agent",
+											"type": "text"
+										},
+										{
+											"key": "assistant_id",
+											"value": "aba8bf65-08f9-45a9-ab27-d5b157a53393",
+											"type": "text"
+										},
+										{
+											"key": "phone_number_id",
+											"value": "89af526d-d765-47b1-98d6-8bc5a851df40",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}models/:id",
+									"host": [
+										"{{base_url}}{{version}}models"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "10264190-3269-477d-b4bb-44e01ece683f"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Reservation Booking Agent",
+											"type": "text"
+										},
+										{
+											"key": "assistant_id",
+											"value": "aba8bf65-08f9-45a9-ab27-d5b157a53393",
+											"type": "text"
+										},
+										{
+											"key": "phone_number_id",
+											"value": "89af526d-d765-47b1-98d6-8bc5a851df40",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}models/:id",
+									"host": [
+										"{{base_url}}{{version}}models"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "10264190-3269-477d-b4bb-44e01ece683f"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "transaction",
+					"item": [
+						{
+							"name": "get-all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}transactions?page=1&per_page=10&plan_id=b07d2ae6-ed4c-4559-ac81-180cc9bb6187",
+									"host": [
+										"{{base_url}}{{version}}transactions"
+									],
+									"query": [
+										{
+											"key": "user_id",
+											"value": "b9a7d589-a697-42bd-b78d-6b2669eea46b",
+											"disabled": true
+										},
+										{
+											"key": "search",
+											"value": "Verona Reynolds",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "per_page",
+											"value": "10"
+										},
+										{
+											"key": "status",
+											"value": "SUCCESS",
+											"description": "PENDING | SUCCESS | FAILED | DISPUTED | REFUNDED",
+											"disabled": true
+										},
+										{
+											"key": "start_date",
+											"value": "2025-03-27T19:00:00.000Z",
+											"disabled": true
+										},
+										{
+											"key": "end_date",
+											"value": "2025-03-28T18:59:59.999Z",
+											"disabled": true
+										},
+										{
+											"key": "plan_id",
+											"value": "b07d2ae6-ed4c-4559-ac81-180cc9bb6187"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "plans",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Yearly",
+											"type": "text"
+										},
+										{
+											"key": "short_description",
+											"value": "{{$randomCatchPhraseDescriptor}}",
+											"type": "text"
+										},
+										{
+											"key": "great_for_use",
+											"value": "Great for learn",
+											"type": "text"
+										},
+										{
+											"key": "points[0]",
+											"value": "{{$randomAbbreviation}}",
+											"type": "text"
+										},
+										{
+											"key": "points[1]",
+											"value": "{{$randomAbbreviation}}",
+											"type": "text"
+										},
+										{
+											"key": "plan_type",
+											"value": "paid",
+											"type": "text"
+										},
+										{
+											"key": "billing_duration",
+											"value": "year",
+											"type": "text"
+										},
+										{
+											"key": "free_duration",
+											"value": "1",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "monthly_price",
+											"value": "99",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "yearly_price",
+											"value": "999",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}plans"
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Monthly",
+											"type": "text"
+										},
+										{
+											"key": "short_description",
+											"value": "{{$randomCatchPhraseDescriptor}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "great_for_use",
+											"value": "Great for learn",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "points[0]",
+											"value": "{{$randomAbbreviation}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "points[1]",
+											"value": "{{$randomAbbreviation}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "plan_type",
+											"value": "paid",
+											"type": "text"
+										},
+										{
+											"key": "billing_duration",
+											"value": "month",
+											"type": "text"
+										},
+										{
+											"key": "free_duration",
+											"value": "1",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "monthly_price",
+											"value": "99",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}plans/archived/:id",
+									"host": [
+										"{{base_url}}{{version}}plans"
+									],
+									"path": [
+										"archived",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "24591351-1194-473f-a276-530401d74036"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "archived",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Monthly",
+											"type": "text"
+										},
+										{
+											"key": "short_description",
+											"value": "{{$randomCatchPhraseDescriptor}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "great_for_use",
+											"value": "Great for learn",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "points[0]",
+											"value": "{{$randomAbbreviation}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "points[1]",
+											"value": "{{$randomAbbreviation}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "plan_type",
+											"value": "paid",
+											"type": "text"
+										},
+										{
+											"key": "billing_duration",
+											"value": "month",
+											"type": "text"
+										},
+										{
+											"key": "free_duration",
+											"value": "1",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "monthly_price",
+											"value": "99",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}plans/archived/:id",
+									"host": [
+										"{{base_url}}{{version}}plans"
+									],
+									"path": [
+										"archived",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "65b0e3ee-420d-43a6-9aab-d19278c7b8cb"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}plans/:id",
+									"host": [
+										"{{base_url}}{{version}}plans"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "66e2e4596312232d6392168c"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}plans?not_archived=true",
+									"host": [
+										"{{base_url}}{{version}}plans"
+									],
+									"query": [
+										{
+											"key": "not_archived",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "notification-sequence",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "step_order",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "delay_offset_minutes",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "channel",
+											"value": "email",
+											"type": "text"
+										},
+										{
+											"key": "template_id",
+											"value": "bfd72231-cf73-4c56-b0bd-84eefcf8ca30",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}notification-sequence"
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Monthly",
+											"type": "text"
+										},
+										{
+											"key": "short_description",
+											"value": "{{$randomCatchPhraseDescriptor}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "great_for_use",
+											"value": "Great for learn",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "points[0]",
+											"value": "{{$randomAbbreviation}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "points[1]",
+											"value": "{{$randomAbbreviation}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "plan_type",
+											"value": "paid",
+											"type": "text"
+										},
+										{
+											"key": "billing_duration",
+											"value": "month",
+											"type": "text"
+										},
+										{
+											"key": "free_duration",
+											"value": "1",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "monthly_price",
+											"value": "99",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}plans/archived/:id",
+									"host": [
+										"{{base_url}}{{version}}plans"
+									],
+									"path": [
+										"archived",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "24591351-1194-473f-a276-530401d74036"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}notification-sequence/:id",
+									"host": [
+										"{{base_url}}{{version}}notification-sequence"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "2877f2b9-fdbd-4668-9e41-fe929f34d9de"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}notification-sequence"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "pending-notification",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "lead_id",
+											"value": "fcd5ec13-b528-473b-bd54-a7905abd06e5",
+											"type": "text"
+										},
+										{
+											"key": "sequence_step_id",
+											"value": "7ae247e4-640b-4df3-83ac-0b81bec541db",
+											"type": "text"
+										},
+										{
+											"key": "scheduled_for",
+											"value": "1754911108",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}pending-notifications"
+							},
+							"response": []
+						},
+						{
+							"name": "mark-email-sended",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "{{$randomFullName}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "arham-ahmed@iinv.tech",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "+12345678910",
+											"type": "text"
+										},
+										{
+											"key": "message",
+											"value": "{{$randomLoremLines}}",
+											"type": "text"
+										},
+										{
+											"key": "company_name",
+											"value": "IINV",
+											"type": "text"
+										},
+										{
+											"key": "lead_from",
+											"value": "website",
+											"type": "text"
+										},
+										{
+											"key": "industry",
+											"value": "Aerospace & Defense",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}pending-notifications/mark-email-sended"
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Monthly",
+											"type": "text"
+										},
+										{
+											"key": "short_description",
+											"value": "{{$randomCatchPhraseDescriptor}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "great_for_use",
+											"value": "Great for learn",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "points[0]",
+											"value": "{{$randomAbbreviation}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "points[1]",
+											"value": "{{$randomAbbreviation}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "plan_type",
+											"value": "paid",
+											"type": "text"
+										},
+										{
+											"key": "billing_duration",
+											"value": "month",
+											"type": "text"
+										},
+										{
+											"key": "free_duration",
+											"value": "1",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "monthly_price",
+											"value": "99",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}plans/archived/:id",
+									"host": [
+										"{{base_url}}{{version}}plans"
+									],
+									"path": [
+										"archived",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "24591351-1194-473f-a276-530401d74036"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}notification-sequence/:id",
+									"host": [
+										"{{base_url}}{{version}}notification-sequence"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "2877f2b9-fdbd-4668-9e41-fe929f34d9de"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}pending-notifications?lead_id=37a0a9da-b534-47e1-bf74-93e7be2022fa",
+									"host": [
+										"{{base_url}}{{version}}pending-notifications"
+									],
+									"query": [
+										{
+											"key": "lead_id",
+											"value": "37a0a9da-b534-47e1-bf74-93e7be2022fa"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "template",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Let’s Connect About Your AI Agent Experience",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Responsible for Agent Follow Up",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "Ready to Take the Next Step with Automely AI?",
+											"type": "text"
+										},
+										{
+											"key": "body",
+											"value": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Automely AI Follow-up</title>\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">\n  <style>\n    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');\n    \n    body, html {\n      margin: 0;\n      padding: 0;\n      background: linear-gradient(135deg, #f7f9fc 0%, #edf1f7 100%);\n      font-family: 'Poppins', Arial, sans-serif;\n      min-height: 100vh;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      color: #333;\n    }\n    \n    .email-container {\n      width: 100%;\n      max-width: 680px;\n      margin: 30px auto;\n      background: #ffffff;\n      border-radius: 18px;\n      overflow: hidden;\n      box-shadow: 0 15px 50px rgba(102, 43, 234, 0.15);\n      position: relative;\n      animation: fadeIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;\n    }\n    \n    .background-pattern {\n      position: absolute;\n      top: 0;\n      left: 0;\n      width: 100%;\n      height: 100%;\n      opacity: 0.03;\n      background: \n        radial-gradient(circle at 10% 20%, rgba(102, 43, 234, 0.2) 0%, transparent 20%),\n        radial-gradient(circle at 90% 80%, rgba(102, 43, 234, 0.15) 0%, transparent 20%),\n        linear-gradient(45deg, transparent 49%, rgba(102, 43, 234, 0.05) 50%, transparent 51%),\n        linear-gradient(-45deg, transparent 49%, rgba(102, 43, 234, 0.05) 50%, transparent 51%);\n      background-size: 150px 150px;\n      z-index: 1;\n    }\n    \n    .content-wrapper {\n      position: relative;\n      z-index: 2;\n    }\n    \n    .header {\n      text-align: center;\n      padding: 30px 0 20px;\n      background: linear-gradient(135deg, #662bea 0%, #8a2be2 100%);\n      border-radius: 18px 18px 0 0;\n      position: relative;\n      overflow: hidden;\n    }\n    \n    .header::before {\n      content: \"\";\n      position: absolute;\n      top: -100px;\n      left: -50px;\n      width: 250px;\n      height: 250px;\n      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);\n      border-radius: 50%;\n      animation: float 8s infinite ease-in-out;\n    }\n    \n    .header::after {\n      content: \"\";\n      position: absolute;\n      bottom: -80px;\n      right: -40px;\n      width: 180px;\n      height: 180px;\n      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);\n      border-radius: 50%;\n      animation: float 10s infinite ease-in-out;\n      animation-delay: 1s;\n    }\n    \n    .logo {\n      width: 140px;\n      height: 140px;\n      background: white;\n      border-radius: 50%;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      margin: 0 auto;\n      box-shadow: 0 10px 30px rgba(0,0,0,0.15);\n      animation: pulse 2s infinite alternate;\n      position: relative;\n      z-index: 3;\n    }\n    \n    .logo img {\n      width: 100px;\n      display: block;\n    }\n    \n    .content-padding {\n      padding: 40px 50px;\n    }\n    \n    .footer-padding {\n      padding: 25px 50px;\n      background: linear-gradient(to right, #f8f9fa 0%, #f0f2f5 100%);\n    }\n    \n    .cta-button {\n      background: linear-gradient(135deg, #662BEA 0%, #8A2BE2 100%);\n      color: #fff;\n      text-decoration: none;\n      font-weight: 700;\n      font-size: 18px;\n      padding: 16px 40px;\n      border-radius: 50px;\n      display: inline-block;\n      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);\n      box-shadow: 0 10px 25px rgba(102, 43, 234, 0.3);\n      position: relative;\n      overflow: hidden;\n      z-index: 2;\n      animation: pulse 2s infinite alternate;\n    }\n    \n    .cta-button::after {\n      content: \"\";\n      position: absolute;\n      top: 0;\n      left: 0;\n      width: 100%;\n      height: 100%;\n      background: linear-gradient(135deg, #5A25D0 0%, #7A25D0 100%);\n      opacity: 0;\n      transition: opacity 0.4s ease;\n      z-index: -1;\n    }\n    \n    .cta-button:hover {\n      transform: translateY(-5px) scale(1.03);\n      box-shadow: 0 15px 35px rgba(102, 43, 234, 0.4);\n    }\n    \n    .cta-button:hover::after {\n      opacity: 1;\n    }\n    \n    .divider {\n      border: none;\n      height: 1px;\n      background: linear-gradient(to right, transparent, rgba(102, 43, 234, 0.2), transparent);\n      margin: 30px 0;\n    }\n    \n    .footer-text {\n      color: #777;\n      font-size: 14px;\n      margin: 0;\n      text-align: center;\n      line-height: 1.6;\n    }\n    \n    .social-icons {\n      display: flex;\n      justify-content: center;\n      gap: 20px;\n      margin: 20px 0;\n    }\n    \n    .social-icons a {\n      color: #662BEA;\n      font-size: 20px;\n      transition: transform 0.3s ease;\n    }\n    \n    .social-icons a:hover {\n      transform: translateY(-5px);\n    }\n    \n    /* Animations */\n    @keyframes fadeIn {\n      from { opacity: 0; transform: translateY(20px); }\n      to { opacity: 1; transform: translateY(0); }\n    }\n    \n    @keyframes pulse {\n      0% { transform: scale(1); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }\n      100% { transform: scale(1.03); box-shadow: 0 15px 40px rgba(102, 43, 234, 0.25); }\n    }\n    \n    @keyframes float {\n      0% { transform: translate(0, 0) rotate(0deg); }\n      33% { transform: translate(10px, -15px) rotate(5deg); }\n      66% { transform: translate(-10px, 10px) rotate(-5deg); }\n      100% { transform: translate(0, 0) rotate(0deg); }\n    }\n    \n    .feature-icon {\n      display: inline-flex;\n      width: 50px;\n      height: 50px;\n      background: rgba(102, 43, 234, 0.1);\n      border-radius: 50%;\n      align-items: center;\n      justify-content: center;\n      margin-right: 15px;\n      color: #662BEA;\n      font-size: 22px;\n      animation: float 6s infinite ease-in-out;\n    }\n    \n    /* Responsive styles */\n    @media only screen and (max-width: 700px) {\n      .email-container {\n        margin: 15px;\n        border-radius: 12px;\n      }\n      \n      .content-padding, .footer-padding {\n        padding: 25px 25px !important;\n      }\n      \n      .cta-button {\n        padding: 14px 30px !important;\n        font-size: 16px !important;\n        width: 100%;\n        text-align: center;\n        box-sizing: border-box;\n      }\n      \n      .logo {\n        width: 100px;\n        height: 100px;\n      }\n      \n      .logo img {\n        width: 70px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <div class=\"email-container\">\n    <div class=\"background-pattern\"></div>\n    \n    <div class=\"content-wrapper\">\n      <!-- Header with Logo -->\n      <div class=\"header\">\n        <div class=\"logo\">\n          <img src=\"https://api.automely.ai/images/defaults/app-logo.png\" alt=\"Automely AI Logo\">\n        </div>\n      </div>\n      \n      <!-- Main Content -->\n      <div class=\"content-padding\">\n        <h1 style=\"color:#222; font-size:26px; line-height:1.4; margin:0 0 15px 0; text-align: center;\">\n          Hi {{customer_name}},\n        </h1>\n        \n        <p style=\"color:#555; font-size:17px; line-height:1.7; margin:0 0 22px 0; text-align: center;\">\n          Thank you for testing our AI Phone Agents! We're excited to hear your feedback and learn how we can support your business.\n        </p>\n        \n        <div style=\"margin: 30px 0;\">\n          <div style=\"display: flex; align-items: center; margin-bottom: 20px; background: rgba(102, 43, 234, 0.03); padding: 15px; border-radius: 12px;\">\n            <div class=\"feature-icon\">\n              <i class=\"fas fa-comment-alt\"></i>\n            </div>\n            <div>\n              <h3 style=\"margin:0 0 5px 0; color:#662BEA;\">Share Your Experience</h3>\n              <p style=\"margin:0; color:#666; font-size:15px;\">Tell us about your experience with our AI agents</p>\n            </div>\n          </div>\n          \n          <div style=\"display: flex; align-items: center; margin-bottom: 20px; background: rgba(102, 43, 234, 0.03); padding: 15px; border-radius: 12px;\">\n            <div class=\"feature-icon\">\n              <i class=\"fas fa-calendar-alt\"></i>\n            </div>\n            <div>\n              <h3 style=\"margin:0 0 5px 0; color:#662BEA;\">Schedule a Meeting</h3>\n              <p style=\"margin:0; color:#666; font-size:15px;\">Let's discuss how we can help your business grow</p>\n            </div>\n          </div>\n          \n          <div style=\"display: flex; align-items: center; margin-bottom: 30px; background: rgba(102, 43, 234, 0.03); padding: 15px; border-radius: 12px;\">\n            <div class=\"feature-icon\">\n              <i class=\"fas fa-lightbulb\"></i>\n            </div>\n            <div>\n              <h3 style=\"margin:0 0 5px 0; color:#662BEA;\">Explore Possibilities</h3>\n              <p style=\"margin:0; color:#666; font-size:15px;\">Discover how AI can transform your operations</p>\n            </div>\n          </div>\n        </div>\n        \n        <p style=\"color:#555; font-size:16px; line-height:1.7; margin:0 0 25px 0; text-align: center;\">\n          Book a meeting at your convenience using the link below:\n        </p>\n        \n        <!-- Centered Button -->\n        <div style=\"text-align: center; margin: 35px 0 30px 0;\">\n          <a href=\"https://cal.com/automely.ai/45min\" class=\"cta-button\">\n            <i class=\"fas fa-calendar-check\" style=\"margin-right: 10px;\"></i> \n            Book a Meeting\n          </a>\n        </div>\n        \n        <p style=\"color:#555; font-size:16px; line-height:1.7; margin:0 0 25px 0; text-align: center;\">\n          To see more demos of our AI Agents in action, visit our website:<br>\n          <a href=\"https://automely.ai/\" style=\"color:#662BEA; text-decoration:none; font-weight:600; border-bottom: 1px dashed #662BEA;\">\n            https://automely.ai/\n          </a>\n        </p>\n        \n        <div class=\"divider\"></div>\n        \n        <!-- Signature -->\n        <div style=\"text-align: center; margin: 30px 0 10px 0;\">\n          <p style=\"color:#222; font-size:18px; font-weight:600; margin:0 0 5px 0;\">Best regards,</p>\n          <p style=\"color:#662BEA; font-size:17px; font-weight:700; margin:0 0 5px 0;\">Sales Support Team</p>\n          <p style=\"color:#444; font-size:16px; margin:0 0 5px 0;\">Automely AI</p>\n          <p style=\"color:#555; font-size:15px; margin:10px 0 0 0;\">\n            <a href=\"tel:+15878445183\" style=\"color:#555; text-decoration:none;\">\n              <i class=\"fas fa-phone-alt\" style=\"margin-right: 8px;\"></i> +1 (587) 844-5183\n            </a>\n          </p>\n        </div>\n      </div>\n      \n      <!-- Footer -->\n      <div class=\"footer-padding\">\n        <div class=\"social-icons\">\n          <a href=\"https://www.facebook.com/people/AutomelyAI/61576374334807/\" target=\"_blank\"><i class=\"fab fa-facebook-f\"></i></a>\n          <a href=\"https://x.com/automelyai\" target=\"_blank\"><i class=\"fab fa-twitter\"></i></a>\n          <a href=\"https://www.linkedin.com/company/automely-ai/\" target=\"_blank\"><i class=\"fab fa-linkedin-in\"></i></a>\n          <a href=\"https://www.youtube.com/@automelyai\" target=\"_blank\"><i class=\"fab fa-youtube\"></i></a>\n        </div>\n        \n        <p class=\"footer-text\">\n          &copy; {{year}} Automely AI &nbsp;|&nbsp;\n          <a href=\"https://automely.ai/\" style=\"color:#662BEA; text-decoration:none; font-weight:600;\">automely.ai</a>\n          <br>\n          <span style=\"font-size:13px; display:block; margin-top:8px;\">Empowering businesses with intelligent AI solutions</span>\n        </p>\n      </div>\n    </div>\n  </div>\n</body>\n</html>",
+											"type": "text"
+										},
+										{
+											"key": "type",
+											"value": "email",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}templates"
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "Monthly",
+											"type": "text"
+										},
+										{
+											"key": "short_description",
+											"value": "{{$randomCatchPhraseDescriptor}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "great_for_use",
+											"value": "Great for learn",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "points[0]",
+											"value": "{{$randomAbbreviation}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "points[1]",
+											"value": "{{$randomAbbreviation}}",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "plan_type",
+											"value": "paid",
+											"type": "text"
+										},
+										{
+											"key": "billing_duration",
+											"value": "month",
+											"type": "text"
+										},
+										{
+											"key": "free_duration",
+											"value": "1",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "monthly_price",
+											"value": "99",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}templates/:id",
+									"host": [
+										"{{base_url}}{{version}}templates"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}templates/:id",
+									"host": [
+										"{{base_url}}{{version}}templates"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "5203e383-7472-450b-99ce-9a436d75b568"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}templates"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "subscription",
+					"item": [
+						{
+							"name": "create stripe subscription link",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "planId",
+											"value": "66e558243ddd43fa844f9d85",
+											"type": "text"
+										},
+										{
+											"key": "duration",
+											"value": "month",
+											"description": "month|| year",
+											"type": "text"
+										},
+										{
+											"key": "successUrl",
+											"value": "https://medium.com/@sultanarslaan473/implement-stripe-with-mern-using-nextjs-f2c32fc9e80",
+											"type": "text"
+										},
+										{
+											"key": "cancelUrl",
+											"value": "https://shivamani.hashnode.dev/integrating-stripe-payments-into-your-saas-with-mern-stack",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}subscription/stripe-link"
+							},
+							"response": []
+						},
+						{
+							"name": "cancel subscription",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}subscription/:id/cancel",
+									"host": [
+										"{{base_url}}{{version}}subscription"
+									],
+									"path": [
+										":id",
+										"cancel"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subscription",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}subscription"
+							},
+							"response": []
+						},
+						{
+							"name": "subscription-single",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}subscription/:id",
+									"host": [
+										"{{base_url}}{{version}}subscription"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "66e57f8cda7b60dc75f00556"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "vapi-calling",
+					"item": [
+						{
+							"name": "call",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "assistant_id",
+											"value": "081fd210-9241-49dd-8f16-49237b0296c1",
+											"type": "text"
+										},
+										{
+											"key": "phone_number_id",
+											"value": "89af526d-d765-47b1-98d6-8bc5a851df40",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "name",
+											"value": "Mario",
+											"type": "text"
+										},
+										{
+											"key": "phone_number",
+											"value": "+15878445183",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "arham-ahmed@iinv.tech",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}vapi/call"
+							},
+							"response": []
+						},
+						{
+							"name": "calls",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}vapi/calls",
+									"host": [
+										"{{base_url}}{{version}}vapi"
+									],
+									"path": [
+										"calls"
+									],
+									"query": [
+										{
+											"key": "lead_id",
+											"value": "a216ba07-29ba-4c42-85b9-cac9c6cf8cf2",
+											"disabled": true
+										},
+										{
+											"key": "assistant_id",
+											"value": "1fae5b2a-cd0b-4883-8c43-b389c8e8f504",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "agents",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "assistant_id",
+											"value": "aba8bf65-08f9-45a9-ab27-d5b157a53393",
+											"type": "text"
+										},
+										{
+											"key": "phone_number_id",
+											"value": "89af526d-d765-47b1-98d6-8bc5a851df40",
+											"type": "text"
+										},
+										{
+											"key": "customer[name]",
+											"value": "MR BEAST",
+											"type": "text"
+										},
+										{
+											"key": "customer[number]",
+											"value": "+16288428960",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}agents"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "email-log",
+					"item": [
+						{
+							"name": "all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}email-logs",
+									"host": [
+										"{{base_url}}{{version}}email-logs"
+									],
+									"query": [
+										{
+											"key": "lead_id",
+											"value": "a216ba07-29ba-4c42-85b9-cac9c6cf8cf2",
+											"disabled": true
+										},
+										{
+											"key": "assistant_id",
+											"value": "1fae5b2a-cd0b-4883-8c43-b389c8e8f504",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "{{super_admin_token}}"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Fixed syntax to access token property in response body\r",
+											"var responseBody = pm.response.json();\r",
+											"pm.globals.set(\"admin_token\", responseBody?.response?.extra.access_token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "superadmin@example.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "roles[0]",
+											"value": "admin",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "roles[1]",
+											"value": "transporter",
+											"type": "text"
+										},
+										{
+											"key": "roles[2]",
+											"value": "organization",
+											"type": "text"
+										},
+										{
+											"key": "roles[3]",
+											"value": "super_admin",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}auth/login"
+							},
+							"response": []
+						},
+						{
+							"name": "forgot-password",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "superadmin@example.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}auth/forget-password"
+							},
+							"response": []
+						},
+						{
+							"name": "verify-otp-code",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "superadmin@example.com",
+											"type": "text"
+										},
+										{
+											"key": "otp_code",
+											"value": "000000",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}auth/verify-otp"
+							},
+							"response": []
+						},
+						{
+							"name": "reset-password",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "superadmin@example.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "confirm_password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "otp_code",
+											"value": "000000",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}auth/reset-password"
+							},
+							"response": []
+						},
+						{
+							"name": "logout",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": "{{base_url}}{{version}}auth/logout"
+							},
+							"response": []
+						},
+						{
+							"name": "me",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}auth/me"
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": {
+							"token": "{{admin_token}}"
+						}
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "user",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "first_name",
+											"value": "ali",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "khan",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "ali@example.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "confirm_password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "technician",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "role",
+											"value": "organization",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "role",
+											"value": "admin",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/create"
+							},
+							"response": []
+						},
+						{
+							"name": "change-password",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "new_password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "confirm_password",
+											"value": "123123",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/change-password"
+							},
+							"response": []
+						},
+						{
+							"name": "update-user",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "first_name",
+											"value": "syed Hasnain",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "rehan",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "email",
+											"value": "danish@gmail.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "123123",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "role",
+											"value": "admin",
+											"description": "technician, organization, admin",
+											"type": "text"
+										},
+										{
+											"key": "company_type_id",
+											"value": "9cefc6d5-1424-495b-b8e4-599979f98309",
+											"type": "text"
+										},
+										{
+											"key": "country_id",
+											"value": "ee63455a-7632-4b1a-be78-c86fcff6b572",
+											"type": "text"
+										},
+										{
+											"key": "phone_no",
+											"value": "123123123213",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}users/update/:id",
+									"host": [
+										"{{base_url}}{{version}}users"
+									],
+									"path": [
+										"update",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "2a125475-079a-4a6a-ad2d-cf0451a314c2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "manage-status",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "status",
+											"value": "inactive",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}users/manage-status/:id",
+									"host": [
+										"{{base_url}}{{version}}users"
+									],
+									"path": [
+										"manage-status",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "d06e59ba-8c97-4918-8893-fd0bc12e66cc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update-time-zone",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "time_zone",
+											"value": "asia/karachi",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/update/timezone"
+							},
+							"response": []
+						},
+						{
+							"name": "delete-user",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": "{{base_url}}{{version}}users/delete"
+							},
+							"response": []
+						},
+						{
+							"name": "get-all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}users?search&page=1&per_page=10&role=organization&status=active",
+									"host": [
+										"{{base_url}}{{version}}users"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": null
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "per_page",
+											"value": "10"
+										},
+										{
+											"key": "role",
+											"value": "organization",
+											"description": "admin OR technician OR organization"
+										},
+										{
+											"key": "status",
+											"value": "active"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-one",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}users/:id",
+									"host": [
+										"{{base_url}}{{version}}users"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "09ddbe32-6fcc-484f-a324-c04ad023b5c1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "upload-profile-picture",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "profile_image",
+											"type": "file",
+											"src": "postman-cloud:///1ef7cc86-2a0e-4630-8bc5-26586f44fe74"
+										},
+										{
+											"key": "user_id",
+											"value": "b6c4226b-6e9b-4804-af49-9989e26afa0c",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/upload/profile-picture"
+							},
+							"response": []
+						},
+						{
+							"name": "add-device-token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "device_token",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/add-device-token"
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": {
+							"token": "{{admin_token}}"
+						}
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "lead",
+					"item": [
+						{
+							"name": "get-all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}lead?page=1&per_page=10",
+									"host": [
+										"{{base_url}}{{version}}lead"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "per_page",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-one",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}lead/:id",
+									"host": [
+										"{{base_url}}{{version}}lead"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "89f9a8f7-e6c5-44f1-925c-860bf2afa956"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}lead/:id",
+									"host": [
+										"{{base_url}}{{version}}lead"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "89f9a8f7-e6c5-44f1-925c-860bf2afa956"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "agent",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Reservation Booking Agent",
+											"type": "text"
+										},
+										{
+											"key": "assistant_id",
+											"value": "aba8bf65-08f9-45a9-ab27-d5b157a53393",
+											"type": "text"
+										},
+										{
+											"key": "phone_number_id",
+											"value": "89af526d-d765-47b1-98d6-8bc5a851df40",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}agents"
+							},
+							"response": []
+						},
+						{
+							"name": "all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}agents"
+							},
+							"response": []
+						},
+						{
+							"name": "single",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}agents/:id",
+									"host": [
+										"{{base_url}}{{version}}agents"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "10264190-3269-477d-b4bb-44e01ece683f"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Reservation Booking Agent",
+											"type": "text"
+										},
+										{
+											"key": "assistant_id",
+											"value": "aba8bf65-08f9-45a9-ab27-d5b157a53393",
+											"type": "text"
+										},
+										{
+											"key": "phone_number_id",
+											"value": "89af526d-d765-47b1-98d6-8bc5a851df40",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}agents/:id",
+									"host": [
+										"{{base_url}}{{version}}agents"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "10264190-3269-477d-b4bb-44e01ece683f"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "Reservation Booking Agent",
+											"type": "text"
+										},
+										{
+											"key": "assistant_id",
+											"value": "aba8bf65-08f9-45a9-ab27-d5b157a53393",
+											"type": "text"
+										},
+										{
+											"key": "phone_number_id",
+											"value": "89af526d-d765-47b1-98d6-8bc5a851df40",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}agents/:id",
+									"host": [
+										"{{base_url}}{{version}}agents"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "10264190-3269-477d-b4bb-44e01ece683f"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "plans",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "{{$randomProduct}}",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "{{$randomLoremLines}}",
+											"type": "text"
+										},
+										{
+											"key": "features[0]",
+											"value": "{{$randomLoremLines}}",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "{{$randomInt}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}plans"
+							},
+							"response": []
+						},
+						{
+							"name": "single",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}plans/:id",
+									"host": [
+										"{{base_url}}{{version}}plans"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "954642db-edc7-44d1-9bcd-66b487a4a0ca"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "{{$randomProduct}}",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "{{$randomLoremLines}}",
+											"type": "text"
+										},
+										{
+											"key": "features[0]",
+											"value": "{{$randomLoremLines}}",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "{{$randomInt}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}plans/:id",
+									"host": [
+										"{{base_url}}{{version}}plans"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "36e94eee-6f28-4a9b-a84f-af9cbcbc8237"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "{{$randomProduct}}",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "{{$randomLoremLines}}",
+											"type": "text"
+										},
+										{
+											"key": "features[0]",
+											"value": "{{$randomLoremLines}}",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "{{$randomInt}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}plans/:id",
+									"host": [
+										"{{base_url}}{{version}}plans"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "36e94eee-6f28-4a9b-a84f-af9cbcbc8237"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}plans?status=active",
+									"host": [
+										"{{base_url}}{{version}}plans"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "active",
+											"description": "active, inactive"
+										},
+										{
+											"key": "search",
+											"value": "BAll",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "dashboard",
+					"item": [
+						{
+							"name": "stats",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}admins/dashboard/stats"
+							},
+							"response": []
+						},
+						{
+							"name": "revenue",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}admins/platform-revenue-graph/2025"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "transaction",
+					"item": [
+						{
+							"name": "get-all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}/transactions?page=1&per_page=10&plan_id",
+									"host": [
+										"{{base_url}}{{version}}"
+									],
+									"path": [
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "user_id",
+											"value": "17f1d523-3c11-46da-9ba9-d80983bd563b",
+											"disabled": true
+										},
+										{
+											"key": "search",
+											"value": "Dandre Rogahn",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "per_page",
+											"value": "10"
+										},
+										{
+											"key": "status",
+											"value": "SUCCESS",
+											"description": "PENDING | SUCCESS | FAILED | DISPUTED | REFUNDED",
+											"disabled": true
+										},
+										{
+											"key": "start_date",
+											"value": "2025-03-27T19:00:00.000Z",
+											"disabled": true
+										},
+										{
+											"key": "end_date",
+											"value": "2025-03-28T18:59:59.999Z",
+											"disabled": true
+										},
+										{
+											"key": "plan_id",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "{{admin_token}}"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "customer",
+			"item": [
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "sign-up",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Fixed syntax to access token property in response body\r",
+											"var responseBody = pm.response.json();\r",
+											"\r",
+											"pm.globals.set(\"customer_token\", responseBody?.response?.extra.access_token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "first_name",
+											"value": "{{$randomFirstName}}",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "{{$randomLastName}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "{{$randomEmail}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "confirm_password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "customer",
+											"type": "text"
+										},
+										{
+											"key": "anonymous_token",
+											"value": "fce2b65bdebfe9762b8bbaf78a9ae65215c0699f4789674d2c46ba3f9e9fec05",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}auth/sign-up"
+							},
+							"response": []
+						},
+						{
+							"name": "get-anonymous",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Fixed syntax to access token property in response body\r",
+											"var responseBody = pm.response.json();\r",
+											"\r",
+											"pm.globals.set(\"customer_token\", responseBody?.response?.extra.access_token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": "{{base_url}}{{version}}auth/get-anonymous"
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Fixed syntax to access token property in response body\r",
+											"var responseBody = pm.response.json();\r",
+											"\r",
+											"pm.globals.set(\"super_admin_token\", responseBody?.response?.extra.access_token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "superadmin@example.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "roles[0]",
+											"value": "admin",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "roles[1]",
+											"value": "customer",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "roles[3]",
+											"value": "super_admin",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}auth/login"
+							},
+							"response": []
+						},
+						{
+							"name": "forgot-password",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "superadmin@example.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}auth/forget-password"
+							},
+							"response": []
+						},
+						{
+							"name": "verify-otp-code",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "danish@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "otp_code",
+											"value": "000000",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}auth/verify-otp"
+							},
+							"response": []
+						},
+						{
+							"name": "reset-password",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "danish@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "confirm_password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "otp_code",
+											"value": "000000",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}auth/reset-password"
+							},
+							"response": []
+						},
+						{
+							"name": "logout",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": "{{base_url}}{{version}}auth/logout"
+							},
+							"response": []
+						},
+						{
+							"name": "me",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}auth/me"
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "user",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "first_name",
+											"value": "bilal",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "khan",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "bilal@iinv.tech",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "confirm_password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "technician",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "organization",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "role",
+											"value": "admin",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/create"
+							},
+							"response": []
+						},
+						{
+							"name": "change-password",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "new_password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "confirm_password",
+											"value": "123123",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/change-password"
+							},
+							"response": []
+						},
+						{
+							"name": "update-user",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "first_name",
+											"value": "syed Hasnain 01",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "rehan",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "danish@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "role",
+											"value": "admin",
+											"description": "technician, organization, admin",
+											"type": "text"
+										},
+										{
+											"key": "phone_no",
+											"value": "123123",
+											"type": "text"
+										},
+										{
+											"key": "company_type_id",
+											"value": "9cefc6d5-1424-495b-b8e4-599979f98309",
+											"type": "text"
+										},
+										{
+											"key": "country_id",
+											"value": "ee63455a-7632-4b1a-be78-c86fcff6b572",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}{{version}}users/update/:id",
+									"host": [
+										"{{base_url}}{{version}}users"
+									],
+									"path": [
+										"update",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "c4cdeca6-4f16-4055-a076-d5373146437a"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}users?page=1&per_page=10&role=customer&status=active",
+									"host": [
+										"{{base_url}}{{version}}users"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "per_page",
+											"value": "10"
+										},
+										{
+											"key": "role",
+											"value": "customer",
+											"description": "admin OR transporter OR organization"
+										},
+										{
+											"key": "status",
+											"value": "active"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "upload-profile-picture",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/danis/OneDrive/Pictures/Screenshots/Screenshot (4).png"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/upload/profile-picture"
+							},
+							"response": []
+						},
+						{
+							"name": "update-time-zone",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "time_zone",
+											"value": "asia/karachi",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/update/timezone"
+							},
+							"response": []
+						},
+						{
+							"name": "add-device-token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "device_token",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}users/add-device-token"
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "vapi-calling",
+					"item": [
+						{
+							"name": "call",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "assistant_id",
+											"value": "ffcd7013-6e2e-4bfd-89b0-8fdea03efcf1",
+											"type": "text"
+										},
+										{
+											"key": "phone_number_id",
+											"value": "89af526d-d765-47b1-98d6-8bc5a851df40",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "name",
+											"value": "Mario",
+											"type": "text"
+										},
+										{
+											"key": "phone_number",
+											"value": "+15878445183",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "arham-ahmed@iinv.tech",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}vapi/call"
+							},
+							"response": []
+						},
+						{
+							"name": "calls",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}vapi/calls?lead_id",
+									"host": [
+										"{{base_url}}{{version}}vapi"
+									],
+									"path": [
+										"calls"
+									],
+									"query": [
+										{
+											"key": "lead_id",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "agents",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "assistant_id",
+											"value": "aba8bf65-08f9-45a9-ab27-d5b157a53393",
+											"type": "text"
+										},
+										{
+											"key": "phone_number_id",
+											"value": "89af526d-d765-47b1-98d6-8bc5a851df40",
+											"type": "text"
+										},
+										{
+											"key": "customer[name]",
+											"value": "MR BEAST",
+											"type": "text"
+										},
+										{
+											"key": "customer[number]",
+											"value": "+16288428960",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}agents"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "lead",
+					"item": [
+						{
+							"name": "lead",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "{{$randomFullName}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "arham-ahmed@iinv.tech",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "{{$randomPhoneNumber}}",
+											"type": "text"
+										},
+										{
+											"key": "message",
+											"value": "{{$randomLoremLines}}",
+											"type": "text"
+										},
+										{
+											"key": "company_name",
+											"value": "Abc",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}lead"
+							},
+							"response": []
+						},
+						{
+							"name": "relevance-lead",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "first_name",
+											"value": "{{$randomFirstName}}",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "{{$randomLastName}}",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "arham-ahmed@iinv.tech",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "{{$randomPhoneNumber}}",
+											"type": "text"
+										},
+										{
+											"key": "message",
+											"value": "{{$randomLoremLines}}",
+											"type": "text"
+										},
+										{
+											"key": "company",
+											"value": "IINV",
+											"type": "text"
+										},
+										{
+											"key": "position",
+											"value": "backend-dev",
+											"type": "text"
+										},
+										{
+											"key": "country",
+											"value": "Russia",
+											"type": "text"
+										},
+										{
+											"key": "language",
+											"value": "en",
+											"type": "text"
+										},
+										{
+											"key": "email_body",
+											"value": "<h1>Test<h1/>",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "lal lay",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}lead/relevance-lead"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "agent",
+					"item": [
+						{
+							"name": "all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}agents"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "plans",
+					"item": [
+						{
+							"name": "all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}plans?not_archived=true",
+									"host": [
+										"{{base_url}}{{version}}plans"
+									],
+									"query": [
+										{
+											"key": "not_archived",
+											"value": "true"
+										},
+										{
+											"key": "search",
+											"value": "BAll",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "transaction",
+					"item": [
+						{
+							"name": "get-all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}transactions?page=1&per_page=10&plan_id=b07d2ae6-ed4c-4559-ac81-180cc9bb6187",
+									"host": [
+										"{{base_url}}{{version}}transactions"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "Verona",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "per_page",
+											"value": "10"
+										},
+										{
+											"key": "status",
+											"value": "SUCCESS",
+											"description": "PENDING | SUCCESS | FAILED | DISPUTED | REFUNDED",
+											"disabled": true
+										},
+										{
+											"key": "start_date",
+											"value": "2025-03-27T19:00:00.000Z",
+											"disabled": true
+										},
+										{
+											"key": "end_date",
+											"value": "2025-03-28T18:59:59.999Z",
+											"disabled": true
+										},
+										{
+											"key": "plan_id",
+											"value": "b07d2ae6-ed4c-4559-ac81-180cc9bb6187"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "subscription",
+					"item": [
+						{
+							"name": "create stripe subscription link",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "plan_id",
+											"value": "461f71e6-4b8a-441e-8d5f-9bf57a4c7543",
+											"type": "text"
+										},
+										{
+											"key": "duration",
+											"value": "month",
+											"description": "month|| year",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "success_url",
+											"value": "https://medium.com/@sultanarslaan473/implement-stripe-with-mern-using-nextjs-f2c32fc9e80",
+											"type": "text"
+										},
+										{
+											"key": "cancel_url",
+											"value": "https://shivamani.hashnode.dev/integrating-stripe-payments-into-your-saas-with-mern-stack",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}subscription/stripe-link"
+							},
+							"response": []
+						},
+						{
+							"name": "customer-portal",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "return_url",
+											"value": "https://automely.ai/",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}{{version}}subscription/customer-portal"
+							},
+							"response": []
+						},
+						{
+							"name": "cancel subscription",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}subscription/:id/cancel",
+									"host": [
+										"{{base_url}}{{version}}subscription"
+									],
+									"path": [
+										":id",
+										"cancel"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subscription",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{base_url}}{{version}}subscription"
+							},
+							"response": []
+						},
+						{
+							"name": "subscription-single",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}{{version}}subscription/:id",
+									"host": [
+										"{{base_url}}{{version}}subscription"
+									],
+									"path": [
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "66e57f8cda7b60dc75f00556"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "{{customer_token}}"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}
