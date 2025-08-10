@@ -221,7 +221,7 @@ export class WebhooksService {
         {
           user: {
             email:
-              this.configService.get('SENDGRID_FROM_EMAIL') ?? 'sales@automely.ai',
+              this.configService.get('SENDGRID_FROM_EMAIL') ?? 'sales@gemups-marketplace.ai',
           },
           notification: {
             title: 'New Contact Submission',
