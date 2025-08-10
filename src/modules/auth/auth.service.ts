@@ -107,10 +107,7 @@ export class AuthService {
           id: anonymous_user.id,
         },
         relations: {
-          latest_subscription: {
-            plan: true,
           },
-        },
       })
 
       if (!user) {

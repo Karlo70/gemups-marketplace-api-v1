@@ -16,11 +16,6 @@ import {
 import * as bcrypt from 'bcryptjs';
 import { Otp } from 'src/modules/auth/entities/otp.entity';
 import { Media } from 'src/modules/media/entities/media.entity';
-import { UserNotificationSetting } from 'src/modules/notifications/entities/user-notification-setting.entity';
-import { UserNotification } from 'src/modules/notifications/entities/user-notification.entity';
-import { Subscription } from 'src/modules/subscription/entities/subscription.entity';
-import { ThirdPartyApi } from 'src/modules/third-party-api-key/entities/third-party-api-key.entity';
-import { PendingNotification } from 'src/modules/pending-notifications/entities/pending-notifications.entity';
 
 export enum UserRole {
   SUPER_ADMIN = 'super_admin',
@@ -97,31 +92,6 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Otp, (otp) => otp.user)
   otps: Otp[];
-
-  @OneToOne(
-    () => UserNotificationSetting,
-    (userNotificationSetting) => userNotificationSetting.user,
-  )
-  user_notification_setting: UserNotificationSetting;
-
-  @OneToOne(() => Subscription, { nullable: true, onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'latest_subscription_id' })
-  latest_subscription: Subscription;
-
-  @Column({ default: false })
-  has_taken_subscription: boolean; // ** used for stepper on frontend
-
-  @OneToMany(
-    () => UserNotification,
-    (userNotification) => userNotification.user,
-  )
-  user_notifications: UserNotification[];
-
-  @OneToMany(() => ThirdPartyApi, (thirdPartyApi) => thirdPartyApi.created_by)
-  third_party_api: ThirdPartyApi[];
-
-  @OneToMany(() => PendingNotification, (pendingNotification) => pendingNotification.created_by)
-  pending_notifications: PendingNotification[];
 
   @BeforeInsert()
   @BeforeUpdate()

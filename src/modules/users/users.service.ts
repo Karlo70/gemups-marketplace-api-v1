@@ -19,7 +19,6 @@ import { ValidationException } from 'src/utils/validation-exception-formatter';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { validateUser } from './validation/user-validation';
 import { validateOneUser } from './validation/user-get-one.validation';
-import { NotificationsService } from '../notifications/notifications.service';
 import { UpdateTimeZoneDto } from './dto/update-time-zone.dto';
 import { UploadProfileDto } from './dto/upload-profile.dto';
 import { MediaService } from '../media/media.service';
@@ -35,7 +34,6 @@ export class UsersService {
     @InjectRepository(LoginAttempt)
     private readonly loginAttemptRepository: Repository<LoginAttempt>,
 
-    private readonly notificationsService: NotificationsService,
     private readonly mediaService: MediaService,
   ) {}
 
@@ -61,8 +59,6 @@ export class UsersService {
     });
 
     await user.save();
-
-    await this.notificationsService.createUserNotificationSetting(user);
 
     const { password, ...userData } = user;
     return userData;
