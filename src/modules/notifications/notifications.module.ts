@@ -15,6 +15,7 @@ import { NotificationConsumer } from './consumers/notification.consumer';
 import { InAppNotificationService } from './services/in-app-notification.service';
 import * as hbs from 'handlebars';
 import { PushNotificationService } from './services/push-notification.service';
+import { EmailNotificationService } from './services/email-notification.service';
 
 hbs.registerHelper('eq', function (arg1, arg2) {
   return arg1 === arg2;
@@ -89,6 +90,7 @@ hbs.registerHelper('eq', function (arg1, arg2) {
     NotificationConsumer,
     InAppNotificationService,
     PushNotificationService,
+    EmailNotificationService,
   ],
   exports: [NotificationsService],
 })

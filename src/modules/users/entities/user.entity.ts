@@ -16,6 +16,7 @@ import {
 import * as bcrypt from 'bcryptjs';
 import { Otp } from 'src/modules/auth/entities/otp.entity';
 import { Media } from 'src/modules/media/entities/media.entity';
+import { UserNotification } from 'src/modules/notifications/entities/user-notification.entity';
 
 export enum UserRole {
   SUPER_ADMIN = 'super_admin',
@@ -92,6 +93,12 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Otp, (otp) => otp.user)
   otps: Otp[];
+
+  @OneToMany(
+    () => UserNotification,
+    (userNotification) => userNotification.user,
+  )
+  user_notifications: UserNotification[];
 
   @BeforeInsert()
   @BeforeUpdate()

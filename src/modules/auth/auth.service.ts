@@ -42,8 +42,6 @@ export class AuthService {
     @InjectRepository(LoginAttempt)
     private readonly loginAttemptRepository: Repository<LoginAttempt>,
 
-    @Inject('STRIPE_CLIENT') private readonly stripe: Stripe,
-
     private readonly jwtService: JwtService,
     private readonly loginAttemptService: LoginAttemptService,
     private readonly notificationsService: NotificationsService,
@@ -84,11 +82,7 @@ export class AuthService {
         role: UserRole.CUSTOMER,
       });
       await anonymous_user.save();
-      // Update on Stripe
-      await this.stripe.customers.update(anonymous_user.stripe_customer_id, {
-        email: signUpDto.email,
-        name: anonymous_user.first_name + ' ' + anonymous_user.last_name,
-      });
+      
       const accessToken = await this.jwtService.signAsync({
         user_id: anonymous_user.id,
       });
@@ -123,13 +117,6 @@ export class AuthService {
     const user = this.usersRepository.create({
       ...signUpDto,
     });
-
-    const stripeCustomer = await this.stripe.customers.create({
-      email: user.email,
-      name: user.first_name + ' ' + user.last_name,
-    });
-
-    user.stripe_customer_id = stripeCustomer.id;
 
     await user.save();
 
@@ -177,12 +164,6 @@ export class AuthService {
       anonymous_token: anonymous_token,
       role: UserRole.ANONYMOUS,
     });
-
-    const stripeCustomer = await this.stripe.customers.create({
-      name: anonymous_user.anonymous_token,
-    });
-
-    anonymous_user.stripe_customer_id = stripeCustomer.id;
 
     await anonymous_user.save();
 
