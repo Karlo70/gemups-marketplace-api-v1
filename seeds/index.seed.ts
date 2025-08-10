@@ -1,11 +1,6 @@
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import { createSuperAdmin } from './create-super-admin.seed';
-import { createAgents } from './create-agents.seed';
-import { createModel } from './create-model.seed';
-import { createAccessToken } from './create-third-party-access-token';
-import { createCronJobs } from './create-cron-jobs.seed';
-import { createHandleNotificationsCronJob } from './create--handle-notifications-cron-jobs.seed';
 // Load the correct .env file
 config({
   path: `.env.${process.env.NODE_ENV}`,
@@ -36,11 +31,6 @@ const seed = async () => {
     console.log('Connected to the database!');
     
     await createSuperAdmin(AppDataSource);
-    await createAgents(AppDataSource);
-    await createModel(AppDataSource);
-    // await createAccessToken(AppDataSource)
-    await createCronJobs(AppDataSource)
-    await createHandleNotificationsCronJob(AppDataSource)
 
     console.log('Seeding complete!');
   } catch (error) {

@@ -2,7 +2,6 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { In, Repository } from 'typeorm';
-import { EmailNotificationNoAuthService } from '../notifications/services/email-notification-no-auth.service';
 import { ConfigService } from '@nestjs/config';
 import { User, UserRole } from '../users/entities/user.entity';
 import {
@@ -28,7 +27,6 @@ export class WebhooksService {
     private readonly userRepository: Repository<User>,
 
     private readonly configService: ConfigService,
-    private readonly emailNotificationNoAuthService: EmailNotificationNoAuthService,
   
   ) {}
 

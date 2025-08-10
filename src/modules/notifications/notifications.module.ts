@@ -12,13 +12,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { NotificationConsumer } from './consumers/notification.consumer';
-import { EmailNotificationService } from './services/email-notification.service';
 import { InAppNotificationService } from './services/in-app-notification.service';
 import * as hbs from 'handlebars';
 import { PushNotificationService } from './services/push-notification.service';
-import { EmailNotificationNoAuthService } from './services/email-notification-no-auth.service';
-import { ThirdPartyApi } from '../third-party-api-key/entities/third-party-api-key.entity';
-import { EmailLog } from '../email-logs/entities/email-log.entity';
 
 hbs.registerHelper('eq', function (arg1, arg2) {
   return arg1 === arg2;
@@ -30,9 +26,7 @@ hbs.registerHelper('eq', function (arg1, arg2) {
       Notification,
       UserNotification,
       UserNotificationSetting,
-      ThirdPartyApi,
       Notification,
-      EmailLog
     ]),
     SharedModule,
     MailerModule.forRootAsync({
@@ -93,11 +87,9 @@ hbs.registerHelper('eq', function (arg1, arg2) {
   providers: [
     NotificationsService,
     NotificationConsumer,
-    EmailNotificationService,
-    EmailNotificationNoAuthService,
     InAppNotificationService,
     PushNotificationService,
   ],
-  exports: [NotificationsService, EmailNotificationNoAuthService],
+  exports: [NotificationsService],
 })
 export class NotificationsModule {}
