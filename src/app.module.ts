@@ -37,8 +37,9 @@ import { OptionalAuthGuard } from './shared/guards/optionalAuthentication.guard'
           ...(configService.get('NODE_ENV') !== 'development' && {
             ssl: {
               rejectUnauthorized: false,
-            },
-          }),
+              ca : configService.get("DB_CA")
+          },
+        }),
         };
       },
     }),

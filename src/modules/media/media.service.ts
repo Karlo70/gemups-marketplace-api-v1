@@ -12,14 +12,14 @@ import { AuthenticationGuard } from 'src/shared/guards/authentication.guard';
 import { ParamIdDto } from 'src/shared/dtos/paramId.dto';
 import { MediaSize } from './enums/media-size.enum';
 import { User } from '../users/entities/user.entity';
-import { S3Service } from 'src/shared/services/s3.service';
+//import { S3Service } from 'src/shared/services/s3.service';
 
 @Injectable()
 @UseGuards(AuthenticationGuard)
 export class MediaService {
   constructor(
     @InjectRepository(Media) private readonly mediaRepo: Repository<Media>,
-    private readonly s3Service: S3Service,
+    // private readonly s3Service: S3Service,
   ) {}
 
   async createMedia(
@@ -50,10 +50,10 @@ export class MediaService {
       type = MediaType.PDF;
     }
 
-    const url = await this.s3Service.uploadFile(file, folder_path);
+    //const url = await this.s3Service.uploadFile(file, folder_path);
     const media = this.mediaRepo.create({
       type: type ?? MediaType.IMAGE,
-      url,
+      url : "https://dummy.com",
       created_by: currentUser,
     });
 
@@ -72,7 +72,7 @@ export class MediaService {
 
     if (!media) throw new NotFoundException('Media not found');
 
-    await this.s3Service.deleteFile(media?.url);
+    //await this.s3Service.deleteFile(media?.url);
 
     await this.mediaRepo.remove(media);
   }

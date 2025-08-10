@@ -16,6 +16,7 @@ export class S3Service {
   private readonly nodeEnv: string;
 
   constructor(private readonly configService: ConfigService) {
+   /*
     this.s3Client = new S3Client({
       region: this.configService.get('AWS_S3_REGION') ?? '',
       credentials: {
@@ -28,7 +29,8 @@ export class S3Service {
     this.bucketName = this.configService.get('AWS_S3_BUCKET_NAME') ?? '';
     this.region = this.configService.get('AWS_S3_REGION') ?? '';
     this.nodeEnv = this.configService.get('NODE_ENV') ?? '';
-  }
+    */
+    }
 
   async uploadFile(file: MemoryStoredFile, folderPath: string) {
     if (!file) {
