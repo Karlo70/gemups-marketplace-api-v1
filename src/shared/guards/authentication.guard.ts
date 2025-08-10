@@ -50,9 +50,6 @@ export class AuthenticationGuard implements CanActivate {
         status: UserStatus.ACTIVE,
       },
       relations: {
-        latest_subscription: {
-          plan: true,
-        },
       },
     });
 

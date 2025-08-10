@@ -8,14 +8,12 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { HttpAdapterHost } from "@nestjs/core";
-import { LoggerService } from "src/modules/logger/logger.service";
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   constructor(
     private readonly httpAdapterHost: HttpAdapterHost,
     private readonly configService: ConfigService,
-    private readonly loggerService: LoggerService,
   ) {}
 
   async catch(exception: unknown, host: ArgumentsHost) {
@@ -23,10 +21,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const httpStatus = this.getHttpStatus(exception);
 
-    // Log the exception with relevant information for any other exception then 422
-    if (httpStatus !== 422) {
-      await this.loggerService.logException(exception, httpStatus, host);
-    }
 
     const responseBody = this.prepareResponse(exception, httpStatus);
 

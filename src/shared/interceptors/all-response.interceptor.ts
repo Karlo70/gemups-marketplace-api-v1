@@ -5,13 +5,12 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, map } from 'rxjs';
-import { LoggerService } from 'src/modules/logger/logger.service';
 import { performance } from 'perf_hooks';
 import { IResponse } from '../interfaces/response.interface';
 
 @Injectable()
 export class AllResponseInterceptor implements NestInterceptor {
-  constructor(private readonly loggerService: LoggerService) {}
+  constructor() {}
 
   intercept(
     context: ExecutionContext,
@@ -25,14 +24,6 @@ export class AllResponseInterceptor implements NestInterceptor {
         const duration = (performance.now() - start).toFixed(2); // Time in ms
         const httpStatus =
           context.switchToHttp().getResponse()?.statusCode || 200;
-
-        // Log the successful response
-        await this.loggerService.logResponseDetails(
-          request,
-          duration,
-          data,
-          httpStatus,
-        );
 
         // Format and return the response
         const formattedResponse = {

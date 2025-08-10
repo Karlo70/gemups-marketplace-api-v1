@@ -8,33 +8,15 @@ import { AllExceptionsFilter } from './shared/allExceptionFilter/all-exceptions.
 import { AllResponseInterceptor } from './shared/interceptors/all-response.interceptor';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { LoggerModule } from './modules/logger/logger.module';
-import { LeadModule } from './modules/lead/lead.module';
-import { VapiModule } from './modules/vapi/vapi.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { SharedModule } from './shared/shared.module';
 import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
-import { AgentModule } from './modules/agent/agent.module';
-import { AdminsModule } from './modules/admins/admins.module';
-import { ModelsModule } from './modules/models/models.module';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
-import { CronJobModule } from './modules/cron-job/cron-job.module';
-import { CronLogModule } from './modules/cron-log/cron-log.module';
 import { OptionalAuthGuard } from './shared/guards/optionalAuthentication.guard';
-import { SubscriptionModule } from './modules/subscription/subscription.module';
-import { PlansModule } from './modules/plans/plans.module';
-import { NotificationSequenceModule } from './modules/notification-sequence/notification-sequence.module';
-import { PendingNotificationsModule } from './modules/pending-notifications/pending-notifications.module';
-import { TemplatesModule } from './modules/templates/templates.module';
-import { ThirdPartyApiModule } from './modules/third-party-api-key/third-party-api-key.module';
-import { EmailsLogModule } from './modules/email-logs/emails-log.module';
-import { NotificationSequenceRetriesModule } from './modules/notification-sequence-retries/notification-sequence-retries.module';
-import { NotificationRetryLogsModule } from './modules/notification-retry-logs/notification-retry-logs.module';
 
 @Module({
   imports: [
-    LoggerModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
@@ -64,27 +46,11 @@ import { NotificationRetryLogsModule } from './modules/notification-retry-logs/n
       isGlobal: true,
       storage: MemoryStoredFile,
     }),
-    LeadModule,
-    VapiModule,
     AuthModule,
     UsersModule,
     SharedModule,
-    AgentModule,
-    AdminsModule,
-    ModelsModule,
     WebhooksModule,
     ScheduleModule.forRoot(),
-    CronJobModule,
-    CronLogModule,
-    SubscriptionModule,
-    PlansModule,
-    NotificationSequenceModule,
-    PendingNotificationsModule,
-    TemplatesModule,
-    ThirdPartyApiModule,
-    EmailsLogModule,
-    NotificationSequenceRetriesModule,
-    NotificationRetryLogsModule,
   ],
   controllers: [AppController],
   providers: [

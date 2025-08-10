@@ -9,7 +9,6 @@ import { LoginAttempt } from 'src/modules/auth/entities/login-attempt.entity';
 import { RealTimeGateway } from './gateway/real-time.gateway';
 import { S3Service } from './services/s3.service';
 import { EncryptionService } from './services/encryption.service';
-import Stripe from 'stripe';
 
 @Global()
 @Module({
@@ -34,19 +33,6 @@ import Stripe from 'stripe';
     RealTimeGateway,
     UrlService,
     EncryptionService,
-    {
-      provide: 'STRIPE_CLIENT',
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        return new Stripe(
-          configService.get<string>('STRIPE_SECRET_KEY') ?? '',
-          {
-            apiVersion: '2025-04-30.basil',
-            typescript: true,
-          },
-        );
-      },
-    },
   ],
   exports: [
     JwtModule,
@@ -56,7 +42,6 @@ import Stripe from 'stripe';
     RealTimeGateway,
     S3Service,
     EncryptionService,
-    'STRIPE_CLIENT',
   ],
 })
 export class SharedModule {}
