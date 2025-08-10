@@ -38,9 +38,4 @@ export class WebhooksController {
     }
   }
 
-  @Post('facebook')
-  async handleWebhookEvent(@Body() body: any, @Req() req: Request, @Res() res: Response) {
-    await this.webhooksService.processLead(body);
-    return res.status(200).send('Webhook received successfully');
-  }
 }
