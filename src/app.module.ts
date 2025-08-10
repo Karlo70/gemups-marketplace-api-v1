@@ -26,7 +26,14 @@ import { OptionalAuthGuard } from './shared/guards/optionalAuthentication.guard'
 
       useFactory: (configService: ConfigService) => {
         return {
-          type: 'postgres',
+          url:"postgres://avnadmin:AVNS_wFoyzZ2ruJbnFM0y0A_@pg-2f66d931-euni-989b.d.aivencloud.com:21208/defaultdb",
+        type:"postgres",
+        ssl:{
+          rejectUnauthorized:false,
+          ca: configService.get("BB_CA")
+        }
+          /*
+          type: 'postgres',  
           host: configService.get('DB_HOST'),
           port: configService.get('DB_PORT'),
           username: configService.get('DB_USERNAME'),
@@ -35,11 +42,12 @@ import { OptionalAuthGuard } from './shared/guards/optionalAuthentication.guard'
           autoLoadEntities: true,
           synchronize: valueToBoolean(configService.get('DB_SYNCHRONIZE')),
           ...(configService.get('NODE_ENV') !== 'development' && {
-            ssl: {
-              rejectUnauthorized: false,
+           ssl: {
+              rejectUnauthorized: true,
               ca : configService.get("DB_CA")
           },
         }),
+        */
         };
       },
     }),
