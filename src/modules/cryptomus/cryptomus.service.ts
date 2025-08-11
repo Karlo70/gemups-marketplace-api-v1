@@ -9,6 +9,8 @@ import { WalletEntity, WalletStatus } from './entities/wallet.entity';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { CryptomusPaymentResponse, CryptomusPaymentStatusResponse } from './interfaces/cryptomus-api.interface';
+import { CryptomusApiService } from './helper/cryptomus-api-service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class CryptomusService {
@@ -21,11 +23,37 @@ export class CryptomusService {
     @InjectRepository(WalletEntity)
     private walletRepository: Repository<WalletEntity>,
     private configService: ConfigService,
+    private cryptomusApiService: CryptomusApiService,
   ) {}
 
   async createWallet(createWalletDto: CreateWalletDto): Promise<WalletEntity> {
-    const wallet = this.walletRepository.create(createWalletDto);
-    return await this.walletRepository.save(wallet);
+    // check if wallet already exists
+    const existingWallet = await this.walletRepository.findOne({ where: { walletAddress: createWalletDto.walletAddress } });
+    if (existingWallet) {
+      throw new BadRequestException('Wallet already exists');
+    }
+
+    // create wallet in database
+    const wallet = this.walletRepository.create({
+      ...createWalletDto,
+    });
+
+    // create wallet in cryptomus
+    const cryptomus_wallet = await this.cryptomusApiService.createWallet({
+      currency: createWalletDto.currency,
+      network: createWalletDto.network,
+      orderId: wallet.id,
+      from_referral_code: createWalletDto.from_referral_code,
+    });
+
+    wallet.cryptomusWalletId = cryptomus_wallet.result.uuid;
+    wallet.walletAddress = cryptomus_wallet.result.address;
+    wallet.network = cryptomus_wallet.result.network;
+    wallet.currency = cryptomus_wallet.result.currency;
+    wallet.currencySymbol = cryptomus_wallet.result.currency_symbol;
+    wallet.status = WalletStatus.ACTIVE;
+    
+    return await wallet.save();
   }
 
   async getWalletById(id: string): Promise<WalletEntity> {
@@ -60,9 +88,8 @@ export class CryptomusService {
     // Create payment record
     const payment = this.paymentRepository.create({
       ...createPaymentDto,
-      walletId: wallet.id,
+      wallet: wallet,
       merchantId: wallet.merchantId,
-      isTest: createPaymentDto.isTest ?? wallet.isTest,
     });
 
     const savedPayment = await this.paymentRepository.save(payment);
@@ -154,8 +181,8 @@ export class CryptomusService {
     await this.updatePaymentStatus(payment.id, newStatus, txHash);
     
     // Update wallet balance if payment is successful
-    if (newStatus === PaymentStatus.PAID && payment.walletId) {
-      await this.updateWalletBalance(payment.walletId, payment.amount);
+    if (newStatus === PaymentStatus.PAID && payment.wallet) {
+      await this.updateWalletBalance(payment.wallet.id, payment.amount);
     }
   }
 
@@ -180,42 +207,24 @@ export class CryptomusService {
       throw new BadRequestException('Missing Cryptomus API credentials');
     }
 
-    const payload = {
-      amount: payment.amount.toString(),
+    return await this.cryptomusApiService.createPayment({
+      amount: Number(payment.amount.toFixed(2)),
       currency: payment.currency,
       orderId: payment.orderId,
       network: wallet.network,
-      urlReturn: payment.returnUrl,
-      urlCallback: payment.callbackUrl,
-      isTest: payment.isTest,
-    };
-
-    const signature = this.generateSignature(payload, apiKey);
-
-    try {
-      const response = await axios.post(
-        `${this.baseUrl}/payment`,
-        payload,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'merchant': merchantId,
-            'sign': signature,
-          },
-        }
-      );
-
-      return response.data;
-    } catch (error) {
-      this.logger.error('Failed to create Cryptomus payment', error.response?.data);
-      throw new BadRequestException('Failed to create payment in Cryptomus');
-    }
+      returnUrl: payment.returnUrl,
+      callbackUrl: payment.callbackUrl,
+      lifetime: 3600,
+      toCurrency: payment.currency,
+      successUrl: payment.returnUrl,
+    });
   }
 
-  private generateSignature(payload: any, apiKey: string): string {
-    const jsonString = JSON.stringify(payload);
-    return crypto.createHmac('sha512', apiKey).update(jsonString).digest('hex');
-  }
+  // TODO: remove this method
+  // private generateSignature(payload: any, apiKey: string): string {
+  //   const jsonString = JSON.stringify(payload);
+  //   return crypto.createHmac('sha512', apiKey).update(jsonString).digest('hex');
+  // }
 
   private verifyWebhookSignature(payload: any, signature: string): boolean {
     const webhookSecret = this.configService.get('CRYPTOMUS_WEBHOOK_SECRET');

@@ -53,4 +53,16 @@ export class CreateWalletDto {
 
   @IsOptional()
   metadata?: Record<string, any>;
+
+  @IsString()
+  @IsOptional()
+  callbackUrl?: string;
+
+  @IsString()
+  @IsOptional()
+  successUrl?: string;
+
+  @IsString()
+  @IsOptional()
+  from_referral_code?: string;
 }

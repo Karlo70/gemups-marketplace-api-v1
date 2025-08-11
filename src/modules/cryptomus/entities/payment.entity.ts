@@ -58,15 +58,9 @@ export class PaymentEntity {
   @Column({ name: 'tx_hash', nullable: true })
   txHash: string;
 
-  @Column({ name: 'user_id', nullable: true })
-  userId: string;
-
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'user_id' })
   user: User;
-
-  @Column({ name: 'description', nullable: true })
-  description: string;
 
   @Column({ name: 'callback_url', nullable: true })
   callbackUrl: string;
@@ -83,9 +77,6 @@ export class PaymentEntity {
   @ManyToOne(() => WalletEntity, { nullable: true })
   @JoinColumn({ name: 'wallet_id' })
   wallet: WalletEntity;
-
-  @Column({ name: 'wallet_id', nullable: true })
-  walletId: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

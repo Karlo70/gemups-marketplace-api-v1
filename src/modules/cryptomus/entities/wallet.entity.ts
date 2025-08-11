@@ -7,6 +7,7 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
+  BaseEntity,
 } from 'typeorm';
 import { PaymentEntity } from './payment.entity';
 import { User } from 'src/modules/users/entities/user.entity';
@@ -29,9 +30,12 @@ export enum NetworkType {
 }
 
 @Entity('wallets')
-export class WalletEntity {
+export class WalletEntity extends BaseEntity{
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column({ name: 'cryptomus_wallet_id', unique: true })
+  cryptomusWalletId: string;
 
   @Column({ name: 'wallet_name' })
   walletName: string;
@@ -39,8 +43,8 @@ export class WalletEntity {
   @Column({ name: 'wallet_address', unique: true })
   walletAddress: string;
 
-  @Column({ name: 'network', type: 'enum', enum: NetworkType })
-  network: NetworkType;
+  @Column({ name: 'network' })
+  network: string;
 
   @Column({ name: 'currency', length: 10 })
   currency: string;

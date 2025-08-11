@@ -38,4 +38,14 @@ export class WebhooksController {
     }
   }
 
+  @Post("wallet")
+  async handleWalletWebhook(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() body: any) {
+    console.log(body);
+    return res.status(200).send('webhook received');
+
+  }
+
 }

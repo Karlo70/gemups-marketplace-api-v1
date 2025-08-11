@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { WalletEntity } from './entities/wallet.entity';
 import cryptomusConfig from './config/cryptomus.config';
 import { CryptomusController } from './cryptomus.controller';
+import { CryptomusApiService } from './helper/cryptomus-api-service';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { CryptomusController } from './cryptomus.controller';
     ConfigModule.forFeature(cryptomusConfig),
   ],
   controllers: [CryptomusController],
-  providers: [CryptomusService],
-  exports: [CryptomusService],
+  providers: [CryptomusService, CryptomusApiService],
+  exports: [CryptomusService, CryptomusApiService],
 })
 export class CryptomusModule {}
