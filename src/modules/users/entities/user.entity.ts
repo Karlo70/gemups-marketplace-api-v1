@@ -19,6 +19,9 @@ import { Media } from 'src/modules/media/entities/media.entity';
 import { UserNotification } from 'src/modules/notifications/entities/user-notification.entity';
 import { PaymentEntity } from 'src/modules/cryptomus/entities/payment.entity';
 import { WalletEntity } from 'src/modules/cryptomus/entities/wallet.entity';
+import { ProxyEntity } from 'src/modules/proxies/entities/proxy.entity';
+import { ProxyOrderEntity } from 'src/modules/proxies/entities/proxy-order.entity';
+import { ProxyUsageEntity } from 'src/modules/proxies/entities/proxy-usage.entity';
 
 export enum UserRole {
   SUPER_ADMIN = 'super_admin',
@@ -108,6 +111,16 @@ export class User extends BaseEntity {
 
   @OneToMany(() => WalletEntity, (wallet) => wallet.owner)
   cryptomus_wallets: WalletEntity[];
+
+  // Proxy Relations
+  @OneToMany(() => ProxyEntity, (proxy) => proxy.owner)
+  proxies: ProxyEntity[];
+
+  @OneToMany(() => ProxyOrderEntity, (order) => order.user)
+  proxy_orders: ProxyOrderEntity[];
+
+  @OneToMany(() => ProxyUsageEntity, (usage) => usage.user)
+  proxy_usage: ProxyUsageEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()

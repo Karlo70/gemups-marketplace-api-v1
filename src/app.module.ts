@@ -14,6 +14,7 @@ import { SharedModule } from './shared/shared.module';
 import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { CryptomusModule } from './modules/cryptomus/cryptomus.module';
+import { ProxiesModule } from './modules/proxies/proxies.module';
 import { OptionalAuthGuard } from './shared/guards/optionalAuthentication.guard';
 
 @Module({
@@ -63,6 +64,7 @@ import { OptionalAuthGuard } from './shared/guards/optionalAuthentication.guard'
     SharedModule,
     WebhooksModule,
     CryptomusModule,
+    ProxiesModule,
     ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
