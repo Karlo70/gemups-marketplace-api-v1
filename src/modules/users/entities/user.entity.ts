@@ -17,6 +17,8 @@ import * as bcrypt from 'bcryptjs';
 import { Otp } from 'src/modules/auth/entities/otp.entity';
 import { Media } from 'src/modules/media/entities/media.entity';
 import { UserNotification } from 'src/modules/notifications/entities/user-notification.entity';
+import { PaymentEntity } from 'src/modules/cryptomus/entities/payment.entity';
+import { WalletEntity } from 'src/modules/cryptomus/entities/wallet.entity';
 
 export enum UserRole {
   SUPER_ADMIN = 'super_admin',
@@ -99,6 +101,13 @@ export class User extends BaseEntity {
     (userNotification) => userNotification.user,
   )
   user_notifications: UserNotification[];
+
+  // Cryptomus Relations
+  @OneToMany(() => PaymentEntity, (payment) => payment.user)
+  cryptomus_payments: PaymentEntity[];
+
+  @OneToMany(() => WalletEntity, (wallet) => wallet.owner)
+  cryptomus_wallets: WalletEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()

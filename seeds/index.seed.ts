@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import { createSuperAdmin } from './create-super-admin.seed';
+import { createCryptomusWallets } from './create-cryptomus-wallets.seed';
 // Load the correct .env file
 config({
   path: `.env.${process.env.NODE_ENV}`,
@@ -31,6 +32,7 @@ const seed = async () => {
     console.log('Connected to the database!');
     
     await createSuperAdmin(AppDataSource);
+    await createCryptomusWallets(AppDataSource);
 
     console.log('Seeding complete!');
   } catch (error) {

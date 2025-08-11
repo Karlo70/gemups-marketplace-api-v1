@@ -13,6 +13,7 @@ import { UsersModule } from './modules/users/users.module';
 import { SharedModule } from './shared/shared.module';
 import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
+import { CryptomusModule } from './modules/cryptomus/cryptomus.module';
 import { OptionalAuthGuard } from './shared/guards/optionalAuthentication.guard';
 
 @Module({
@@ -61,6 +62,7 @@ import { OptionalAuthGuard } from './shared/guards/optionalAuthentication.guard'
     UsersModule,
     SharedModule,
     WebhooksModule,
+    CryptomusModule,
     ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
