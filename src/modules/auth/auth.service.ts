@@ -189,7 +189,6 @@ export class AuthService {
     const user = await this.usersRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.profile_image', 'profile_image')
-      .leftJoinAndSelect('user.latest_subscription', 'latest_subscription')
       .addSelect('user.password')
       .where('user.email = :email AND user.deleted_at IS NULL', {
         email: logInDto.email,
