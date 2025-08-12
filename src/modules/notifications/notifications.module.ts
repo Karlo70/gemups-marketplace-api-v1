@@ -62,8 +62,9 @@ hbs.registerHelper('eq', function (arg1, arg2) {
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         connection: {
-          host: configService.get('REDIS_HOST'),
-          port: configService.get('REDIS_PORT'),
+          // host: configService.get('REDIS_HOST'),
+          // port: configService.get('REDIS_PORT'),
+          url:configService.get('REDIS_URL')
         },
         prefix:
           configService.get('NODE_ENV') === 'production'

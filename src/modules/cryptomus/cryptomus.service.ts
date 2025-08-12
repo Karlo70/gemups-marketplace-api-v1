@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
-import * as crypto from 'crypto';
+import crypto from 'crypto';
 import { PaymentEntity, PaymentStatus } from './entities/payment.entity';
 import { WalletEntity, WalletStatus } from './entities/wallet.entity';
 import { CreatePaymentDto } from './dto/create-payment.dto';

@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
-import * as crypto from 'crypto';
+import crypto from 'crypto';
 
 @Injectable()
 export class CryptomusApiService {
