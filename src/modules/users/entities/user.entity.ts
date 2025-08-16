@@ -7,7 +7,6 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -19,9 +18,9 @@ import { Media } from 'src/modules/media/entities/media.entity';
 import { UserNotification } from 'src/modules/notifications/entities/user-notification.entity';
 import { PaymentEntity } from 'src/modules/cryptomus/entities/payment.entity';
 import { WalletEntity } from 'src/modules/cryptomus/entities/wallet.entity';
-import { ProxyEntity } from 'src/modules/proxies/entities/proxy.entity';
-import { ProxyOrderEntity } from 'src/modules/proxies/entities/proxy-order.entity';
-import { ProxyUsageEntity } from 'src/modules/proxies/entities/proxy-usage.entity';
+import { Order } from 'src/modules/order/entities/order.entity';
+import { Cart } from 'src/modules/cart/entities/cart.entity';
+import { ProxySellerProxy } from 'src/modules/proxy-seller-proxies/entities/proxy-seller-proxy.entity';
 
 export enum UserRole {
   SUPER_ADMIN = 'super_admin',
@@ -109,18 +108,18 @@ export class User extends BaseEntity {
   @OneToMany(() => PaymentEntity, (payment) => payment.user)
   cryptomus_payments: PaymentEntity[];
 
-  @OneToMany(() => WalletEntity, (wallet) => wallet.owner)
-  cryptomus_wallets: WalletEntity[];
+  @OneToOne(() => WalletEntity, (wallet) => wallet.owner)
+  cryptomus_wallet: WalletEntity;
 
-  // Proxy Relations
-  @OneToMany(() => ProxyEntity, (proxy) => proxy.owner)
-  proxies: ProxyEntity[];
+  // Order Relations
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 
-  @OneToMany(() => ProxyOrderEntity, (order) => order.user)
-  proxy_orders: ProxyOrderEntity[];
+  @OneToMany(() => Cart, (cart) => cart.user)
+  cart: Cart[];
 
-  @OneToMany(() => ProxyUsageEntity, (usage) => usage.user)
-  proxy_usage: ProxyUsageEntity[];
+  @OneToMany(() => ProxySellerProxy, (proxy) => proxy.owner)
+  proxy_seller_proxies: ProxySellerProxy[];
 
   @BeforeInsert()
   @BeforeUpdate()

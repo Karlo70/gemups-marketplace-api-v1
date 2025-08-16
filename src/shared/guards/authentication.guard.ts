@@ -18,7 +18,7 @@ export class AuthenticationGuard implements CanActivate {
     private readonly loginAttemptsRepository: Repository<LoginAttempt>,
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
@@ -50,6 +50,8 @@ export class AuthenticationGuard implements CanActivate {
         status: UserStatus.ACTIVE,
       },
       relations: {
+        cryptomus_wallet: true,
+        cart: true,
       },
     });
 

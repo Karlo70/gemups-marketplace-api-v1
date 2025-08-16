@@ -1,6 +1,5 @@
 import { IsString, IsNumber, IsOptional, IsEnum, IsUrl, IsUUID, Min, IsBoolean } from 'class-validator';
 import { PaymentType } from '../entities/payment.entity';
-import { NetworkType } from '../entities/wallet.entity';
 
 export class CreatePaymentDto {
 
@@ -16,8 +15,8 @@ export class CreatePaymentDto {
   returnUrl?: string;
 
   @IsOptional()
-  @IsEnum(NetworkType)
-  preferredNetwork?: NetworkType;
+  @IsString()
+  preferredNetwork?: string;
 
   @IsOptional()
   @IsUUID()

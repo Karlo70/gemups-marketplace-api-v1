@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { WalletEntity, NetworkType, WalletStatus } from '../src/modules/cryptomus/entities/wallet.entity';
+import { WalletEntity, WalletStatus } from '../src/modules/cryptomus/entities/wallet.entity';
 
 export const createCryptomusWallets = async (dataSource: DataSource) => {
   const walletRepository = dataSource.getRepository(WalletEntity);
@@ -13,13 +13,13 @@ export const createCryptomusWallets = async (dataSource: DataSource) => {
 
   const wallets = [
     {
-      walletName: 'Bitcoin Test Wallet',
-      walletAddress: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
-      network: NetworkType.BITCOIN,
+      cryptomus_wallet_id: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
+      cryptomus_wallet_uuid: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
+      cryptomus_wallet_address: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
+      network: 'bitcoin',
       currency: 'BTC',
-      currencySymbol: 'BTC',
       status: WalletStatus.ACTIVE,
-      isTest: true,
+      is_test: true,
       minAmount: 0.0001,
       maxAmount: 1.0,
       dailyLimit: 10.0,
@@ -33,13 +33,13 @@ export const createCryptomusWallets = async (dataSource: DataSource) => {
       }
     },
     {
-      walletName: 'Ethereum Test Wallet',
-      walletAddress: '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
-      network: NetworkType.ETHEREUM,
+      cryptomus_wallet_id: '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
+      cryptomus_wallet_uuid: '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
+      cryptomus_wallet_address: '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
+      network: 'ethereum',
       currency: 'ETH',
-      currencySymbol: 'ETH',
       status: WalletStatus.ACTIVE,
-      isTest: true,
+      is_test: true,
       minAmount: 0.001,
       maxAmount: 100.0,
       dailyLimit: 1000.0,
@@ -53,13 +53,13 @@ export const createCryptomusWallets = async (dataSource: DataSource) => {
       }
     },
     {
-      walletName: 'BSC Test Wallet',
-      walletAddress: '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
-      network: NetworkType.BINANCE_SMART_CHAIN,
+      cryptomus_wallet_id: '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
+      cryptomus_wallet_uuid: '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
+      cryptomus_wallet_address: '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
+      network: 'binance_smart_chain',
       currency: 'BNB',
-      currencySymbol: 'BNB',
       status: WalletStatus.ACTIVE,
-      isTest: true,
+      is_test: true,
       minAmount: 0.001,
       maxAmount: 50.0,
       dailyLimit: 500.0,
@@ -78,7 +78,7 @@ export const createCryptomusWallets = async (dataSource: DataSource) => {
     for (const walletData of wallets) {
       const wallet = walletRepository.create(walletData);
       await walletRepository.save(wallet);
-      console.log(`Created wallet: ${wallet.walletName} (${wallet.currency})`);
+      console.log(`Created wallet: ${wallet.cryptomus_wallet_id} (${wallet.currency})`);
     }
     console.log('Successfully created Cryptomus test wallets');
   } catch (error) {

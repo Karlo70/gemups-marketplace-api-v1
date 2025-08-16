@@ -2,15 +2,14 @@ import { Injectable, Logger, BadRequestException, NotFoundException } from '@nes
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import axios from 'axios';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 import { PaymentEntity, PaymentStatus } from './entities/payment.entity';
 import { WalletEntity, WalletStatus } from './entities/wallet.entity';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { CreateWalletDto } from './dto/create-wallet.dto';
-import { CryptomusPaymentResponse, CryptomusPaymentStatusResponse } from './interfaces/cryptomus-api.interface';
+import { CryptomusPaymentResponse } from './interfaces/cryptomus-api.interface';
 import { CryptomusApiService } from './helper/cryptomus-api-service';
-import { v4 as uuidv4 } from 'uuid';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class CryptomusService {
@@ -24,36 +23,54 @@ export class CryptomusService {
     private walletRepository: Repository<WalletEntity>,
     private configService: ConfigService,
     private cryptomusApiService: CryptomusApiService,
-  ) {}
+  ) { }
 
-  async createWallet(createWalletDto: CreateWalletDto): Promise<WalletEntity> {
-    // check if wallet already exists
-    const existingWallet = await this.walletRepository.findOne({ where: { walletAddress: createWalletDto.walletAddress } });
-    if (existingWallet) {
-      throw new BadRequestException('Wallet already exists');
+  async createWallet(createWalletDto: CreateWalletDto, user: User): Promise<WalletEntity> {
+    console.log("🚀 ~ CryptomusService ~ createWallet ~ user:", user)
+    try {
+      // check if wallet already exists
+      const existingWallet = await this.walletRepository.findOne({ where: { owner: { id: user.id } } });
+      if (existingWallet) {
+        throw new BadRequestException('Wallet already exists');
+      }
+  
+      // create wallet in database
+      const wallet = this.walletRepository.create({
+        ...createWalletDto,
+        owner: user,
+      });
+  
+      // create wallet in cryptomus
+      // const cryptomus_wallet = await this.cryptomusApiService.createWallet({
+      //   currency: createWalletDto.currency,
+      //   network: createWalletDto.network,
+      //   orderId: wallet.id,
+      //   from_referral_code: createWalletDto.from_referral_code,
+      // });
+  
+      const cryptomus_wallet = {
+        result: {
+        id: '123',
+        uuid: '123',
+        address: '123',
+        network: createWalletDto.network,
+        currency: createWalletDto.currency,
+        url: 'https://cryptomus.com/wallet/123',
+        }
+      }
+
+      wallet.cryptomus_wallet_id = cryptomus_wallet.result.id;
+      wallet.cryptomus_wallet_uuid = cryptomus_wallet.result.uuid;
+      wallet.cryptomus_wallet_address = cryptomus_wallet.result.address;
+      wallet.network = cryptomus_wallet.result.network;
+      wallet.currency = cryptomus_wallet.result.currency;
+      wallet.url = cryptomus_wallet.result.url;
+      wallet.status = WalletStatus.ACTIVE;
+  
+      return await wallet.save();
+    } catch (error) {
+      throw new BadRequestException(error?.response?.data?.message ?? error.message);
     }
-
-    // create wallet in database
-    const wallet = this.walletRepository.create({
-      ...createWalletDto,
-    });
-
-    // create wallet in cryptomus
-    const cryptomus_wallet = await this.cryptomusApiService.createWallet({
-      currency: createWalletDto.currency,
-      network: createWalletDto.network,
-      orderId: wallet.id,
-      from_referral_code: createWalletDto.from_referral_code,
-    });
-
-    wallet.cryptomusWalletId = cryptomus_wallet.result.uuid;
-    wallet.walletAddress = cryptomus_wallet.result.address;
-    wallet.network = cryptomus_wallet.result.network;
-    wallet.currency = cryptomus_wallet.result.currency;
-    wallet.currencySymbol = cryptomus_wallet.result.currency_symbol;
-    wallet.status = WalletStatus.ACTIVE;
-    
-    return await wallet.save();
   }
 
   async getWalletById(id: string): Promise<WalletEntity> {
@@ -67,14 +84,14 @@ export class CryptomusService {
   async getActiveWallets(): Promise<WalletEntity[]> {
     return await this.walletRepository.find({
       where: { status: WalletStatus.ACTIVE },
-      order: { createdAt: 'DESC' },
+      order: { created_at: 'DESC' },
     });
   }
 
   async createPayment(createPaymentDto: CreatePaymentDto): Promise<PaymentEntity> {
     // Find available wallet
     let wallet: WalletEntity | null;
-    
+
     if (createPaymentDto.walletId) {
       wallet = await this.getWalletById(createPaymentDto.walletId);
     } else {
@@ -89,7 +106,6 @@ export class CryptomusService {
     const payment = this.paymentRepository.create({
       ...createPaymentDto,
       wallet: wallet,
-      merchantId: wallet.merchantId,
     });
 
     const savedPayment = await this.paymentRepository.save(payment);
@@ -97,7 +113,7 @@ export class CryptomusService {
     try {
       // Create payment in Cryptomus
       const cryptomusPayment = await this.createCryptomusPayment(savedPayment, wallet);
-      
+
       // Update payment with Cryptomus data
       savedPayment.cryptomusPaymentId = cryptomusPayment.result.uuid;
       savedPayment.walletAddress = cryptomusPayment.result.address;
@@ -113,7 +129,7 @@ export class CryptomusService {
   }
 
   async getPaymentById(id: string): Promise<PaymentEntity> {
-    const payment = await this.paymentRepository.findOne({ 
+    const payment = await this.paymentRepository.findOne({
       where: { id },
       relations: ['wallet']
     });
@@ -124,7 +140,7 @@ export class CryptomusService {
   }
 
   async getPaymentByOrderId(orderId: string): Promise<PaymentEntity> {
-    const payment = await this.paymentRepository.findOne({ 
+    const payment = await this.paymentRepository.findOne({
       where: { orderId },
       relations: ['wallet']
     });
@@ -136,7 +152,7 @@ export class CryptomusService {
 
   async updatePaymentStatus(paymentId: string, status: PaymentStatus, txHash?: string): Promise<PaymentEntity> {
     const payment = await this.getPaymentById(paymentId);
-    
+
     payment.status = status;
     if (txHash) {
       payment.txHash = txHash;
@@ -179,7 +195,7 @@ export class CryptomusService {
     }
 
     await this.updatePaymentStatus(payment.id, newStatus, txHash);
-    
+
     // Update wallet balance if payment is successful
     if (newStatus === PaymentStatus.PAID && payment.wallet) {
       await this.updateWalletBalance(payment.wallet.id, payment.amount);
@@ -200,12 +216,12 @@ export class CryptomusService {
   }
 
   private async createCryptomusPayment(payment: PaymentEntity, wallet: WalletEntity): Promise<CryptomusPaymentResponse> {
-    const apiKey = wallet.apiKey || this.configService.get('CRYPTOMUS_API_KEY');
-    const merchantId = wallet.merchantId;
+    // const apiKey = wallet.apiKey || this.configService.get('CRYPTOMUS_API_KEY');
+    // const merchantId = wallet.merchantId;
 
-    if (!apiKey || !merchantId) {
-      throw new BadRequestException('Missing Cryptomus API credentials');
-    }
+    // if (!apiKey || !merchantId) {
+    //   throw new BadRequestException('Missing Cryptomus API credentials');
+    // }
 
     return await this.cryptomusApiService.createPayment({
       amount: Number(payment.amount.toFixed(2)),
@@ -250,8 +266,7 @@ export class CryptomusService {
       .update(WalletEntity)
       .set({
         balance: () => `balance + ${amount}`,
-        dailyUsed: () => `daily_used + ${amount}`,
-        lastActivity: new Date(),
+        last_activity: new Date(),
       })
       .where('id = :id', { id: walletId })
       .execute();

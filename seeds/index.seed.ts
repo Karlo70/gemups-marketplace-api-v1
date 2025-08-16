@@ -2,26 +2,24 @@ import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import { createSuperAdmin } from './create-super-admin.seed';
 import { createCryptomusWallets } from './create-cryptomus-wallets.seed';
+import { createCategories } from './create-categories.seed';
+import { createProducts } from './create-products.seed';
 // Load the correct .env file
 config({
   path: `.env.${process.env.NODE_ENV}`,
 });
 // Initialize TypeORM DataSource
 const AppDataSource = new DataSource({
-  type: 'postgres',
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-  entities: ['src/**/*.entity.ts'],
+  url: process.env.DB_URL,
   synchronize: false,
   logging: true,
-  ...(process.env.NODE_ENV !== 'development' && {
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  }),
+  type: 'postgres',
+  entities: ['src/**/*.entity.ts'],
+  migrations: ['src/migrations/*.ts'],
+  migrationsRun: true,
+  ssl: process.env.NODE_ENV !== 'development' ? {
+    rejectUnauthorized: false,
+  } : false,
 });
 
 const seed = async () => {
@@ -33,6 +31,8 @@ const seed = async () => {
     
     await createSuperAdmin(AppDataSource);
     await createCryptomusWallets(AppDataSource);
+    await createCategories(AppDataSource);
+    await createProducts(AppDataSource);
 
     console.log('Seeding complete!');
   } catch (error) {

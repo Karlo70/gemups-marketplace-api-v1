@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
-import crypto from 'crypto';
+import * as  crypto from 'crypto';
 
 @Injectable()
 export class CryptomusApiService {
@@ -10,7 +10,7 @@ export class CryptomusApiService {
 
   constructor(
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   private getMerchantId(): string {
     return this.configService.get<string>('CRYPTOMUS_MERCHANT_ID') || '';
@@ -78,7 +78,7 @@ export class CryptomusApiService {
       network: options.network,
       order_id: options.orderId,
       url_callback: this.configService.get<string>('CRYPTOMUS_CALLBACK_URL'),
-      ...(options.from_referral_code && {from_referral_code: options.from_referral_code}),
+      ...(options.from_referral_code && { from_referral_code: options.from_referral_code }),
     };
 
     const sign = this.createSignature(payload);
@@ -93,7 +93,7 @@ export class CryptomusApiService {
       });
       return response.data;
     } catch (error) {
-      this.logger.error('Error creating wallet', error?.response?.data || error.message);
+      this.logger.error('Error creating wallet', error?.response?.data.message ?? error.message);
       throw error;
     }
   }
@@ -166,7 +166,7 @@ export class CryptomusApiService {
 
   async blockWallet(options: { uuid?: string; orderId?: string; isForceRefund?: boolean }): Promise<any> {
     const payload: any = {};
-    
+
     if (options.uuid) {
       payload.uuid = options.uuid;
     } else if (options.orderId) {
@@ -198,7 +198,7 @@ export class CryptomusApiService {
 
   async getPaymentInfo(options: { uuid?: string; orderId?: string }): Promise<any> {
     const payload: any = {};
-    
+
     if (options.uuid) {
       payload.uuid = options.uuid;
     } else if (options.orderId) {
@@ -234,7 +234,7 @@ export class CryptomusApiService {
       address: options.address,
       is_subtract: options.isSubtract
     };
-    
+
     if (options.uuid) {
       payload.uuid = options.uuid;
     } else if (options.orderId) {
@@ -262,7 +262,7 @@ export class CryptomusApiService {
 
   async resendWebhook(options: { uuid?: string; orderId?: string }): Promise<any> {
     const payload: any = {};
-    
+
     if (options.uuid) {
       payload.uuid = options.uuid;
     } else if (options.orderId) {
@@ -302,7 +302,7 @@ export class CryptomusApiService {
       network: options.network,
       status: options.status || 'paid'
     };
-    
+
     if (options.uuid) {
       payload.uuid = options.uuid;
     }
@@ -341,7 +341,7 @@ export class CryptomusApiService {
       network: options.network,
       status: options.status || 'paid'
     };
-    
+
     if (options.uuid) {
       payload.uuid = options.uuid;
     }
@@ -380,7 +380,7 @@ export class CryptomusApiService {
       network: options.network,
       status: options.status || 'paid'
     };
-    
+
     if (options.uuid) {
       payload.uuid = options.uuid;
     }
@@ -427,7 +427,7 @@ export class CryptomusApiService {
 
   async getPaymentHistory(options: { dateFrom?: string; dateTo?: string } = {}): Promise<any> {
     const payload: any = {};
-    
+
     if (options.dateFrom) {
       payload.date_from = options.dateFrom;
     }

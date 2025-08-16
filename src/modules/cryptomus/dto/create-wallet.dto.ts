@@ -1,21 +1,13 @@
 import { IsString, IsEnum, IsOptional, IsNumber, IsBoolean, Min, IsUrl } from 'class-validator';
-import { NetworkType, WalletStatus } from '../entities/wallet.entity';
+import {  WalletStatus } from '../entities/wallet.entity';
 
 export class CreateWalletDto {
-  @IsString()
-  walletName: string;
 
   @IsString()
-  walletAddress: string;
-
-  @IsEnum(NetworkType)
-  network: NetworkType;
+  network: string;
 
   @IsString()
   currency: string;
-
-  @IsString()
-  currencySymbol: string;
 
   @IsEnum(WalletStatus)
   @IsOptional()
@@ -23,44 +15,14 @@ export class CreateWalletDto {
 
   @IsBoolean()
   @IsOptional()
-  isTest?: boolean;
-
-  @IsNumber()
-  @Min(0)
-  @IsOptional()
-  minAmount?: number;
-
-  @IsNumber()
-  @Min(0)
-  @IsOptional()
-  maxAmount?: number;
-
-  @IsNumber()
-  @Min(0)
-  @IsOptional()
-  dailyLimit?: number;
-
-  @IsString()
-  merchantId: string;
-
-  @IsString()
-  @IsOptional()
-  apiKey?: string;
-
-  @IsString()
-  @IsOptional()
-  webhookSecret?: string;
+  is_test?: boolean;
 
   @IsOptional()
   metadata?: Record<string, any>;
 
   @IsString()
   @IsOptional()
-  callbackUrl?: string;
-
-  @IsString()
-  @IsOptional()
-  successUrl?: string;
+  success_url?: string;
 
   @IsString()
   @IsOptional()

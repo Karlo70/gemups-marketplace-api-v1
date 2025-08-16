@@ -15,8 +15,9 @@ import { CreateWalletDto } from './dto/create-wallet.dto';
 import { CryptomusWebhookDto } from './dto/webhook.dto';
 import { AuthenticationGuard } from '../../shared/guards/authentication.guard';
 import { RolesGuard } from '../../shared/guards/roles.guard';
-import { RolesDecorator } from 'src/shared/guards/roles.decorator';
-import { UserRole } from '../users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
+import { CurrentUser } from 'src/shared/decorators/current-user.decorator';
+import { IResponse } from 'src/shared/interfaces/response.interface';
 
 @Controller('cryptomus')
 export class CryptomusController {
@@ -24,69 +25,60 @@ export class CryptomusController {
 
   @Post('wallets')
   @UseGuards(AuthenticationGuard, RolesGuard)
-  @RolesDecorator(UserRole.ADMIN)
-  async createWallet(@Body() createWalletDto: CreateWalletDto) {
-    const wallet = await this.cryptomusService.createWallet(createWalletDto);
+  async createWallet(@Body() createWalletDto: CreateWalletDto, @CurrentUser() user: User):Promise<IResponse> {
+    const wallet = await this.cryptomusService.createWallet(createWalletDto,user);
     return {
-      success: true,
-      data: wallet,
       message: 'Wallet created successfully',
+      details: wallet,
     };
   }
 
   @Get('wallets')
   @UseGuards(AuthenticationGuard, RolesGuard)
-  @RolesDecorator(UserRole.ADMIN)
-  async getWallets() {
+  async getWallets():Promise<IResponse> {
     const wallets = await this.cryptomusService.getActiveWallets();
     return {
-      success: true,
-      data: wallets,
+      details: wallets,
       message: 'Wallets retrieved successfully',
     };
   }
 
   @Get('wallets/:id')
   @UseGuards(AuthenticationGuard, RolesGuard)
-  @RolesDecorator(UserRole.ADMIN)
-  async getWallet(@Param('id') id: string) {
+  async getWallet(@Param('id') id: string):Promise<IResponse> {
     const wallet = await this.cryptomusService.getWalletById(id);
     return {
-      success: true,
-      data: wallet,
+      details: wallet,
       message: 'Wallet retrieved successfully',
     };
   }
 
   @Post('payments')
   @UseGuards(AuthenticationGuard)
-  async createPayment(@Body() createPaymentDto: CreatePaymentDto) {
+  async createPayment(@Body() createPaymentDto: CreatePaymentDto):Promise<IResponse> {
     const payment = await this.cryptomusService.createPayment(createPaymentDto);
     return {
-      success: true,
-      data: payment,
+      details: payment,
       message: 'Payment created successfully',
     };
   }
 
   @Get('payments/:id')
   @UseGuards(AuthenticationGuard)
-  async getPayment(@Param('id') id: string) {
+  async getPayment(@Param('id') id: string):Promise<IResponse> {
     const payment = await this.cryptomusService.getPaymentById(id);
     return {
-      success: true,
-      data: payment,
+      details: payment,
       message: 'Payment retrieved successfully',
     };
   }
 
   @Get('payments/order/:orderId')
   @UseGuards(AuthenticationGuard)
-  async getPaymentByOrderId(@Param('orderId') orderId: string) {
+  async getPaymentByOrderId(@Param('orderId') orderId: string):Promise<IResponse> {
     const payment = await this.cryptomusService.getPaymentByOrderId(orderId);
     return {
-      success: true,
-      data: payment,
+      details: payment,
       message: 'Payment retrieved successfully',
     };
   }
@@ -95,9 +87,8 @@ export class CryptomusController {
   @HttpCode(HttpStatus.OK)
   async handleWebhook(
     @Body() webhookData: CryptomusWebhookDto,
-    @Headers('signature') signature: string,
-  ) {
+    @Headers('signature') signature: string,):Promise<IResponse> {
     await this.cryptomusService.processWebhook(webhookData, signature);
-    return { success: true, message: 'Webhook processed successfully' };
+    return { message: 'Webhook processed successfully' };
   }
 }

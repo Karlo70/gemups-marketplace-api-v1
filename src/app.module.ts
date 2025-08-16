@@ -14,8 +14,14 @@ import { SharedModule } from './shared/shared.module';
 import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { CryptomusModule } from './modules/cryptomus/cryptomus.module';
-import { ProxiesModule } from './modules/proxies/proxies.module';
 import { OptionalAuthGuard } from './shared/guards/optionalAuthentication.guard';
+import { ProductsModule } from './modules/products/products.module';
+import { OrderModule } from './modules/order/order.module';
+import { CategoryModule } from './modules/category/category.module';
+import { SevenElevenProxiesModule } from './modules/seven-eleven-proxies/seven-eleven-proxies.module';
+import { CartModule } from './modules/cart/cart.module';
+import { TransactionModule } from './modules/transaction/transaction.module';
+import { ProxySellerProxiesModule } from './modules/proxy-seller-proxies/proxy-seller-proxies.module';
 
 @Module({
   imports: [
@@ -64,8 +70,14 @@ import { OptionalAuthGuard } from './shared/guards/optionalAuthentication.guard'
     SharedModule,
     WebhooksModule,
     CryptomusModule,
-    ProxiesModule,
     ScheduleModule.forRoot(),
+    ProductsModule,
+    OrderModule,
+    CategoryModule,
+    SevenElevenProxiesModule,
+    CartModule,
+    TransactionModule,
+    ProxySellerProxiesModule,
   ],
   controllers: [AppController],
   providers: [

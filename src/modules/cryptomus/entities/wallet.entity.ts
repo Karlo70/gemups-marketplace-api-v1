@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  ManyToOne,
+  OneToOne,
   JoinColumn,
   BaseEntity,
 } from 'typeorm';
@@ -18,16 +18,16 @@ export enum WalletStatus {
   MAINTENANCE = 'maintenance',
 }
 
-export enum NetworkType {
-  BITCOIN = 'bitcoin',
-  ETHEREUM = 'ethereum',
-  BINANCE_SMART_CHAIN = 'bsc',
-  POLYGON = 'polygon',
-  SOLANA = 'solana',
-  TRON = 'tron',
-  LITECOIN = 'litecoin',
-  DOGECOIN = 'dogecoin',
-}
+// export enum NetworkType {
+//   BITCOIN = 'bitcoin',
+//   ETHEREUM = 'ethereum',
+//   BINANCE_SMART_CHAIN = 'bsc',
+//   POLYGON = 'polygon',
+//   SOLANA = 'solana',
+//   TRON = 'tron',
+//   LITECOIN = 'litecoin',
+//   DOGECOIN = 'dogecoin',
+// }
 
 @Entity('wallets')
 export class WalletEntity extends BaseEntity{
@@ -35,13 +35,13 @@ export class WalletEntity extends BaseEntity{
   id: string;
 
   @Column({ name: 'cryptomus_wallet_id', unique: true })
-  cryptomusWalletId: string;
+  cryptomus_wallet_id: string;
 
-  @Column({ name: 'wallet_name' })
-  walletName: string;
+  @Column({ name: 'cryptomus_wallet_uuid', unique: true })
+  cryptomus_wallet_uuid: string;
 
-  @Column({ name: 'wallet_address', unique: true })
-  walletAddress: string;
+  @Column({ name: 'cryptomus_wallet_address', unique: true })
+  cryptomus_wallet_address: string;
 
   @Column({ name: 'network' })
   network: string;
@@ -49,45 +49,18 @@ export class WalletEntity extends BaseEntity{
   @Column({ name: 'currency', length: 10 })
   currency: string;
 
-  @Column({ name: 'currency_symbol', length: 10 })
-  currencySymbol: string;
+  @Column({ name: 'url' })
+  url: string;
 
   @Column({ name: 'status', type: 'enum', enum: WalletStatus, default: WalletStatus.ACTIVE })
   status: WalletStatus;
 
-  @Column({ name: 'is_test', default: false })
-  isTest: boolean;
-
   @Column({ name: 'balance', type: 'decimal', precision: 18, scale: 8, default: 0 })
   balance: number;
 
-  @Column({ name: 'min_amount', type: 'decimal', precision: 18, scale: 8, nullable: true })
-  minAmount: number;
-
-  @Column({ name: 'max_amount', type: 'decimal', precision: 18, scale: 8, nullable: true })
-  maxAmount: number;
-
-  @Column({ name: 'daily_limit', type: 'decimal', precision: 18, scale: 8, nullable: true })
-  dailyLimit: number;
-
-  @Column({ name: 'daily_used', type: 'decimal', precision: 18, scale: 8, default: 0 })
-  dailyUsed: number;
-
-  @Column({ name: 'merchant_id' })
-  merchantId: string;
-
-  @Column({ name: 'api_key', nullable: true })
-  apiKey: string;
-
-  @Column({ name: 'webhook_secret', nullable: true })
-  webhookSecret: string;
-
-  @ManyToOne(() => User, { nullable: true })
+  @OneToOne(() => User, { nullable: true, eager: true })
   @JoinColumn({ name: 'owner_id' })
   owner: User;
-
-  @Column({ name: 'owner_id', nullable: true })
-  ownerId: string;
 
   @Column({ name: 'metadata', type: 'jsonb', nullable: true })
   metadata: Record<string, any>;
@@ -96,11 +69,14 @@ export class WalletEntity extends BaseEntity{
   payments: PaymentEntity[];
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updated_at: Date;
+
+  @Column({ nullable:true })
+  deleted_at: Date;
 
   @Column({ name: 'last_activity', nullable: true })
-  lastActivity: Date;
+  last_activity: Date;
 }
