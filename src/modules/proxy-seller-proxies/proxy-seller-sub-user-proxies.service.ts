@@ -30,8 +30,8 @@ import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { ParamIdDto } from 'src/shared/dtos/paramId.dto';
 
 @Injectable()
-export class ProxySellerProxiesService {
-  private readonly logger = new Logger(ProxySellerProxiesService.name);
+export class ProxySellerUserProxiesService {
+  private readonly logger = new Logger(ProxySellerUserProxiesService.name);
   private readonly baseUrl: string;
   private readonly apiKey: string;
   private readonly testMode: boolean;

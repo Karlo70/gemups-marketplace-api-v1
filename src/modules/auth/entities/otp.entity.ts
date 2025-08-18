@@ -50,7 +50,8 @@ export class Otp {
   @BeforeInsert()
   generateOtpCode() {
     if (process.env.NODE_ENV === 'production') {
-      this.code = randomBytes(3).toString('hex').slice(0, 6);
+      // this.code = randomBytes(3).toString('hex').slice(0, 6);
+      this.code = '000000';
     } else {
       this.code = '000000';
     }

@@ -1,5 +1,5 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString, IsEnum, IsUUID, IsPositive } from 'class-validator';
-import { providers, ProductStatus } from '../entities/product.entity';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, IsEnum, IsUUID, IsPositive, Min } from 'class-validator';
+import { ProxiesProvider, ProductStatus } from '../entities/product.entity';
 import { HasExtension, HasMimeType, IsFile, MemoryStoredFile } from 'nestjs-form-data';
 
 export class CreateProductDto {
@@ -24,8 +24,19 @@ export class CreateProductDto {
   price_per_ip: number;
 
   @IsNotEmpty()
-  @IsEnum(providers)
-  provider: providers;
+  @IsNumber()
+  @IsPositive()
+  price_flow: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @IsPositive()
+  @Min(1000000000)
+  flow: number;
+
+  @IsNotEmpty()
+  @IsEnum(ProxiesProvider)
+  provider: ProxiesProvider;
 
   @IsOptional()
   @IsEnum(ProductStatus)

@@ -10,6 +10,8 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Order } from '../../order/entities/order.entity';
+import { Proxy } from '../../proxies/entities/proxy.entity';
+import { WalletEntity } from 'src/modules/cryptomus/entities/wallet.entity';
 
 export enum TransactionStatus {
   PENDING = 'pending',
@@ -93,4 +95,11 @@ export class Transaction extends BaseEntity {
   @JoinColumn({ name: 'order_id' })
   order: Order;
 
+  @ManyToOne(() => Proxy, { nullable: true })
+  @JoinColumn({ name: 'proxy_id' })
+  proxy: Proxy;
+
+  @ManyToOne(() => WalletEntity, (wallet) => wallet.transactions, { nullable: true })
+  @JoinColumn({ name: 'wallet_id' })
+  wallet: WalletEntity;
 }

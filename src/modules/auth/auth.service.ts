@@ -47,7 +47,7 @@ export class AuthService {
     private readonly notificationsService: NotificationsService,
     private readonly eventEmitter: EventEmitter2,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   async signUp(signUpDto: SignUpDto, req: Request) {
     const access_token = req?.headers.authorization?.split(' ')[1] ?? '';
@@ -82,7 +82,7 @@ export class AuthService {
         role: UserRole.CUSTOMER,
       });
       await anonymous_user.save();
-      
+
       const accessToken = await this.jwtService.signAsync({
         user_id: anonymous_user.id,
       });
@@ -101,7 +101,8 @@ export class AuthService {
           id: anonymous_user.id,
         },
         relations: {
-          },
+          cryptomus_wallet: true,
+        },
       })
 
       if (!user) {
@@ -189,6 +190,7 @@ export class AuthService {
     const user = await this.usersRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.profile_image', 'profile_image')
+      .leftJoinAndSelect('user.cryptomus_wallet', 'cryptomus_wallet')
       .addSelect('user.password')
       .where('user.email = :email AND user.deleted_at IS NULL', {
         email: logInDto.email,

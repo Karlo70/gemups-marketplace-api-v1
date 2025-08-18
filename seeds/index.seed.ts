@@ -4,6 +4,7 @@ import { createSuperAdmin } from './create-super-admin.seed';
 import { createCryptomusWallets } from './create-cryptomus-wallets.seed';
 import { createCategories } from './create-categories.seed';
 import { createProducts } from './create-products.seed';
+import { createProxyPricingSeed } from './create-proxy-pricing.seed';
 // Load the correct .env file
 config({
   path: `.env.${process.env.NODE_ENV}`,
@@ -33,6 +34,7 @@ const seed = async () => {
     await createCryptomusWallets(AppDataSource);
     await createCategories(AppDataSource);
     await createProducts(AppDataSource);
+    await createProxyPricingSeed(AppDataSource);
 
     console.log('Seeding complete!');
   } catch (error) {

@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { PaymentEntity } from './payment.entity';
 import { User } from 'src/modules/users/entities/user.entity';
+import { Transaction } from 'src/modules/transaction/entities/transaction.entity';
 
 export enum WalletStatus {
   ACTIVE = 'active',
@@ -34,22 +35,25 @@ export class WalletEntity extends BaseEntity{
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'cryptomus_wallet_id', unique: true })
+  @Column({ name: 'cryptomus_wallet_id', unique: true, nullable: true })
   cryptomus_wallet_id: string;
 
-  @Column({ name: 'cryptomus_wallet_uuid', unique: true })
+  @Column({ name: 'cryptomus_wallet_uuid', unique: true, nullable: true })
   cryptomus_wallet_uuid: string;
 
-  @Column({ name: 'cryptomus_wallet_address', unique: true })
+  @Column({ name: 'cryptomus_wallet_address', unique: true, nullable: true })
   cryptomus_wallet_address: string;
 
-  @Column({ name: 'network' })
+  @Column({ name: 'cryptomus_wallet_order_id', unique: true, nullable: true })
+  cryptomus_wallet_order_id: string;
+
+  @Column({ name: 'network', nullable: true })
   network: string;
 
-  @Column({ name: 'currency', length: 10 })
+  @Column({ name: 'currency', length: 10, nullable: true })
   currency: string;
 
-  @Column({ name: 'url' })
+  @Column({ name: 'url', nullable: true })
   url: string;
 
   @Column({ name: 'status', type: 'enum', enum: WalletStatus, default: WalletStatus.ACTIVE })
@@ -65,8 +69,8 @@ export class WalletEntity extends BaseEntity{
   @Column({ name: 'metadata', type: 'jsonb', nullable: true })
   metadata: Record<string, any>;
 
-  @OneToMany(() => PaymentEntity, (payment) => payment.wallet)
-  payments: PaymentEntity[];
+  @OneToMany(() => Transaction, (transaction) => transaction.wallet)
+  transactions: Transaction[];
 
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;

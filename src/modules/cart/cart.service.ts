@@ -73,7 +73,7 @@ export class CartService {
     if (cartItem) {
       // Update existing item quantity
       cartItem.quantity += quantity;
-      cartItem.total_price = cartItem.quantity * product.price_per_ip;
+      cartItem.total_price = cartItem.quantity * (product.price_per_ip ?? product.price_flow);
       cartItem.metadata = { ...cartItem.metadata, ...metadata };
       await this.cartItemRepository.save(cartItem);
     } else {
@@ -82,8 +82,8 @@ export class CartService {
         cart: cart,
         product: product,
         quantity: quantity,
-        unit_price: product.price_per_ip,
-        total_price: product.price_per_ip * quantity,
+        unit_price: product.price_per_ip ?? product.price_flow,
+        total_price: (product.price_per_ip ?? product.price_flow) * quantity,
         metadata: metadata,
       });
       await this.cartItemRepository.save(cartItem);
@@ -116,7 +116,7 @@ export class CartService {
 
     if (updateCartItemDto.quantity !== undefined) {
       cartItem.quantity = updateCartItemDto.quantity;
-      cartItem.total_price = cartItem.quantity * cartItem.product.price_per_ip;
+      cartItem.total_price = cartItem.quantity * (cartItem.product.price_per_ip ?? cartItem.product.price_flow);
     }
 
     if (updateCartItemDto.metadata !== undefined) {
@@ -183,7 +183,7 @@ export class CartService {
       throw new BadRequestException('You do not have a cryptomus wallet');
     }
 
-    if (user.cryptomus_wallet.balance < cart.total_amount) {
+    if (Number(user.cryptomus_wallet.balance) < cart.total_amount) {
       throw new BadRequestException('Insufficient balance in your wallet');
     }
 
@@ -210,6 +210,7 @@ export class CartService {
         total_amount: cart.total_amount,
       };
     } catch (error) {
+      console.error("🚀 ~ CartService ~ checkout ~ error:", error)
       throw new BadRequestException({
         message: 'Checkout failed',
         error: error.message,

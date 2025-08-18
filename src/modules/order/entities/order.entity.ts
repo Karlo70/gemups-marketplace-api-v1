@@ -30,11 +30,14 @@ export enum PaymentMethod {
 
 @Entity()
 export class Order extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
-    
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
+
     @Column({ type: 'int', default: 0 })
-    total_items: number;
+    total_items_ip: number;
+
+    @Column({ type: "bigint", default: null, nullable: true })
+    total_items_flow: number
 
     @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
     subtotal: number;

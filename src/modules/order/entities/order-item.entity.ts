@@ -6,12 +6,15 @@ import { Product } from "../../products/entities/product.entity";
 export class OrderItem extends BaseEntity {
     @PrimaryGeneratedColumn("uuid")
     id: string;
-    
+
     @Column({ type: 'int' })
     quantity: number;
 
-    @Column({ type: 'decimal', precision: 10, scale: 2 })
-    unit_price: number;
+    @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, default: null })
+    unit_price_ip: number;
+
+    @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, default: null })
+    unit_price_flow: number;
 
     @Column({ type: 'decimal', precision: 10, scale: 2 })
     total_price: number;

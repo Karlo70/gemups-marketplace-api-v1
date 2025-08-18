@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, IsNull, Like } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Product, providers, ProductStatus } from './entities/product.entity';
+import { Product } from './entities/product.entity';
 import { User } from '../users/entities/user.entity';
 import { GetAllProductsDto } from './dto/get-all-products.dto';
 import { ValidationException } from 'src/utils/validation-exception-formatter';
@@ -18,30 +18,30 @@ export class ProductsService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
-  ) {}
+  ) { }
 
   async create(createProductDto: CreateProductDto, user: User) {
     const existingProduct = await this.productRepository.findOne({
-      where: { 
-        name: createProductDto.name, 
+      where: {
+        name: createProductDto.name,
         provider: createProductDto.provider,
-        deleted_at: IsNull() 
+        deleted_at: IsNull()
       },
     });
 
     if (existingProduct) {
-      throw new ValidationException({ 
-        name: 'Product with this name and provider already exists' 
+      throw new ValidationException({
+        name: 'Product with this name and provider already exists'
       });
     }
 
-      const category = await this.categoryRepository.findOne({
-        where: { id: createProductDto.category_id, deleted_at: IsNull() },
-      });
+    const category = await this.categoryRepository.findOne({
+      where: { id: createProductDto.category_id, deleted_at: IsNull() },
+    });
 
-      if (!category) {
-        throw new ValidationException({ category_id: 'Category not found' });
-      }
+    if (!category) {
+      throw new ValidationException({ category_id: 'Category not found' });
+    }
 
     const { image_url, ...rest } = createProductDto;
 
@@ -73,32 +73,32 @@ export class ProductsService {
     }
 
     if (getAllDto.provider) {
-      queryBuilder.andWhere('product.provider = :provider', { 
-        provider: getAllDto.provider 
+      queryBuilder.andWhere('product.provider = :provider', {
+        provider: getAllDto.provider
       });
     }
 
     if (getAllDto.status) {
-      queryBuilder.andWhere('product.status = :status', { 
-        status: getAllDto.status 
+      queryBuilder.andWhere('product.status = :status', {
+        status: getAllDto.status
       });
     }
 
     if (getAllDto.category_id) {
-      queryBuilder.andWhere('product.category_id = :category_id', { 
-        category_id: getAllDto.category_id 
+      queryBuilder.andWhere('product.category_id = :category_id', {
+        category_id: getAllDto.category_id
       });
     }
 
     if (getAllDto.from) {
-      queryBuilder.andWhere('product.created_at >= :from', { 
-        from: getAllDto.from 
+      queryBuilder.andWhere('product.created_at >= :from', {
+        from: getAllDto.from
       });
     }
 
     if (getAllDto.to) {
-      queryBuilder.andWhere('product.created_at <= :to', { 
-        to: getAllDto.to 
+      queryBuilder.andWhere('product.created_at <= :to', {
+        to: getAllDto.to
       });
     }
 
@@ -130,16 +130,16 @@ export class ProductsService {
 
     if (updateProductDto.name && updateProductDto.name !== product.name) {
       const existingProduct = await this.productRepository.findOne({
-        where: { 
-          name: updateProductDto.name, 
+        where: {
+          name: updateProductDto.name,
           provider: product.provider,
-          deleted_at: IsNull() 
+          deleted_at: IsNull()
         },
       });
 
       if (existingProduct && existingProduct.id !== id) {
-        throw new ValidationException({ 
-          name: 'Product with this name and provider already exists' 
+        throw new ValidationException({
+          name: 'Product with this name and provider already exists'
         });
       }
     }

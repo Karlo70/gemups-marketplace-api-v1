@@ -91,8 +91,11 @@ export class CryptomusApiService {
           'Content-Type': 'application/json',
         }
       });
+      console.log("🚀 ~ CryptomusApiService ~ createWallet ~ response:", response)
       return response.data;
     } catch (error) {
+      console.log("🚀 ~ CryptomusApiService ~ createWallet ~ error:", error)
+      console.log("🚀 ~ CryptomusApiService ~ createWallet ~ error:", error.response.data.errors)
       this.logger.error('Error creating wallet', error?.response?.data.message ?? error.message);
       throw error;
     }
@@ -445,7 +448,7 @@ export class CryptomusApiService {
           'Content-Type': 'application/json',
         }
       });
-      return response.data;
+      return response.data.result;
     } catch (error) {
       this.logger.error('Error getting payment history', error?.response?.data || error.message);
       throw error;

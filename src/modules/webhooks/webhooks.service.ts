@@ -9,6 +9,7 @@ import {
   ThirdPartyAccessToken,
 } from './entities/third-party-access-token.entity';
 import * as dayjs from 'dayjs';
+import { CryptomusService } from '../cryptomus/cryptomus.service';
 export interface FACEBOOK_LEAD_RESPONSE {
   email: string;
   full_name: string;
@@ -26,12 +27,22 @@ export class WebhooksService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
 
+    private readonly cryptomusService: CryptomusService,
     private readonly configService: ConfigService,
-  
-  ) {}
+
+  ) { }
 
   private readonly appId = process.env.FACEBOOK_APP_ID;
   private readonly appSecret = process.env.FACEBOOK_APP_SECRET;
+
+
+
+
+  async handleWalletWebhook(body: any) {
+    console.log("🚀 ~ WebhooksService ~ handleWalletWebhook ~ body:", body)
+    await this.cryptomusService.processWebhook(body);
+
+  }
 
   private cleanData(inputObj) {
     const cleanedObj = {};

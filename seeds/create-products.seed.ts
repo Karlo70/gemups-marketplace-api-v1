@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { Product, providers, ProductStatus } from '../src/modules/products/entities/product.entity';
+import { Product, ProxiesProvider, ProductStatus } from '../src/modules/products/entities/product.entity';
 import { Category } from '../src/modules/category/entities/category.entity';
 
 export const createProducts = async (dataSource: DataSource) => {
@@ -18,7 +18,7 @@ export const createProducts = async (dataSource: DataSource) => {
       name: 'Residential Proxy Package',
       description: 'High-quality residential proxies for web scraping and automation',
       price_per_ip: 0.15,
-      provider: providers.SEVEN_ELEVEN_PROXIES,
+      provider: ProxiesProvider.SEVEN_ELEVEN_PROXIES,
       status: ProductStatus.ACTIVE,
       category: categories.find(c => c.name === 'Residential Proxies'),
     },
@@ -26,7 +26,7 @@ export const createProducts = async (dataSource: DataSource) => {
       name: 'Datacenter Proxy Package',
       description: 'Fast and reliable datacenter proxies for high-speed operations',
       price_per_ip: 0.08,
-      provider: providers.SEVEN_ELEVEN_PROXIES,
+      provider: ProxiesProvider.SEVEN_ELEVEN_PROXIES,
       status: ProductStatus.ACTIVE,
       category: categories.find(c => c.name === 'Datacenter Proxies'),
     },
@@ -34,7 +34,7 @@ export const createProducts = async (dataSource: DataSource) => {
       name: 'Mobile Proxy Package',
       description: 'Mobile proxies for mobile-specific applications and testing',
       price_per_ip: 0.25,
-      provider: providers.SEVEN_ELEVEN_PROXIES,
+      provider: ProxiesProvider.SEVEN_ELEVEN_PROXIES,
       status: ProductStatus.ACTIVE,
       category: categories.find(c => c.name === 'Mobile Proxies'),
     },
@@ -42,7 +42,7 @@ export const createProducts = async (dataSource: DataSource) => {
       name: 'Rotating Proxy Package',
       description: 'Automatically rotating proxies for enhanced anonymity',
       price_per_ip: 0.20,
-      provider: providers.SEVEN_ELEVEN_PROXIES,
+      provider: ProxiesProvider.SEVEN_ELEVEN_PROXIES,
       status: ProductStatus.ACTIVE,
       category: categories.find(c => c.name === 'Rotating Proxies'),
     },
@@ -50,7 +50,7 @@ export const createProducts = async (dataSource: DataSource) => {
       name: 'Static Proxy Package',
       description: 'Dedicated static proxies for consistent performance',
       price_per_ip: 0.30,
-      provider: providers.SEVEN_ELEVEN_PROXIES,
+      provider: ProxiesProvider.SEVEN_ELEVEN_PROXIES,
       status: ProductStatus.ACTIVE,
       category: categories.find(c => c.name === 'Static Proxies'),
     },

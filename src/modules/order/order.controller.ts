@@ -21,6 +21,7 @@ import { CurrentUser } from '../../shared/decorators/current-user.decorator';
 import { User } from '../users/entities/user.entity';
 import { IResponse } from 'src/shared/interfaces/response.interface';
 import { GetAllOrder } from './dto/get-all-order.dto';
+import { ParamIdDto } from 'src/shared/dtos/paramId.dto';
 
 @Controller('orders')
 @UseGuards(AuthenticationGuard, RolesGuard)
@@ -40,12 +41,12 @@ export class OrderController {
 
   @Get()
   @UseGuards(AuthenticationGuard,RolesGuard)
-  @RolesDecorator(UserRole.ADMIN, UserRole.SUPER_ADMIN)
-  async findAll(@Query() query: GetAllOrder) :Promise<IResponse> {
-    const orders = await this.orderService.findAll(query);
+  async findAll(@Query() query: GetAllOrder, @CurrentUser() user: User) :Promise<IResponse> {
+    const {items,meta} = await this.orderService.findAll(query, user);
     return {
       message: "Orders fetched successfully",
-      details: orders,
+      details: items,
+      extra: meta,
     }
   }
 
@@ -71,9 +72,8 @@ export class OrderController {
   }
 
   @Get(':id')
-  @RolesDecorator(UserRole.CUSTOMER, UserRole.ADMIN, UserRole.SUPER_ADMIN)
-  async findOne(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User) :Promise<IResponse> {
-    const order = await this.orderService.findOne(id);
+  async findOne(@Param() paramIdDto: ParamIdDto, @CurrentUser() user: User) :Promise<IResponse> {
+    const order = await this.orderService.findOne(paramIdDto);
     return {
       message: "Order fetched successfully",
       details: order,
@@ -83,10 +83,10 @@ export class OrderController {
   @Patch(':id')
   @RolesDecorator(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   async update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param() paramIdDto: ParamIdDto,
     @Body() updateOrderDto: UpdateOrderDto,
   ) :Promise<IResponse> {
-    const order = await this.orderService.update(id, updateOrderDto);
+    const order = await this.orderService.update(paramIdDto, updateOrderDto);
     return {
       message: "Order updated successfully",
       details: order,
@@ -96,11 +96,11 @@ export class OrderController {
   @Patch(':id/cancel')
   @RolesDecorator(UserRole.CUSTOMER, UserRole.ADMIN, UserRole.SUPER_ADMIN)
   async cancelOrder(
-    @Param('id', ParseIntPipe) id: number,
+    @Param() paramIdDto: ParamIdDto,
     @Body('reason') reason: string,
     @CurrentUser() user: User,
   ) :Promise<IResponse> {
-    const order = await this.orderService.cancelOrder(id, reason);
+    const order = await this.orderService.cancelOrder(paramIdDto, reason);
     return {
       message: "Order cancelled successfully",
       details: order,
@@ -110,11 +110,11 @@ export class OrderController {
   @Patch(':id/payment-status')
   @RolesDecorator(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   async updatePaymentStatus(
-    @Param('id', ParseIntPipe) id: number,
+    @Param() paramIdDto: ParamIdDto,
     @Body('payment_status') paymentStatus: string,
     @Body('transaction_id') transactionId?: string,
   ) :Promise<IResponse> {
-    const order = await this.orderService.updatePaymentStatus(id, paymentStatus as any, transactionId);
+    const order = await this.orderService.updatePaymentStatus(paramIdDto, paymentStatus as any, transactionId);
     return {
       message: "Payment status updated successfully",
       details: order,
@@ -123,8 +123,8 @@ export class OrderController {
 
   @Delete(':id')
   @RolesDecorator(UserRole.ADMIN, UserRole.SUPER_ADMIN)
-  async remove(@Param('id', ParseIntPipe) id: number) :Promise<IResponse> {
-    await this.orderService.remove(id);
+  async remove(@Param() paramIdDto: ParamIdDto) :Promise<IResponse> {
+    await this.orderService.remove(paramIdDto);
     return {
       message: "Order deleted successfully",
     }

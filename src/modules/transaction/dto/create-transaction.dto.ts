@@ -57,6 +57,10 @@ export class CreateTransactionDto {
   order_id?: string;
 
   @IsOptional()
+  @IsUUID()
+  proxy_id?: string;
+
+  @IsOptional()
   metadata?: Record<string, any>;
 
   @IsOptional()

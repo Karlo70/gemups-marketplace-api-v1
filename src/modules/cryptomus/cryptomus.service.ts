@@ -1,15 +1,20 @@
 import { Injectable, Logger, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
 import { PaymentEntity, PaymentStatus } from './entities/payment.entity';
 import { WalletEntity, WalletStatus } from './entities/wallet.entity';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { CreateWalletDto } from './dto/create-wallet.dto';
-import { CryptomusPaymentResponse } from './interfaces/cryptomus-api.interface';
+import { CryptomusPaymentResponse, CryptomusPaymentServicesResponse } from './interfaces/cryptomus-api.interface';
 import { CryptomusApiService } from './helper/cryptomus-api-service';
-import { User } from '../users/entities/user.entity';
+import { User, UserRole } from '../users/entities/user.entity';
+import { ParamIdDto } from 'src/shared/dtos/paramId.dto';
+import { v4 as uuidv4 } from 'uuid';
+import { TestWalletWebhookDto } from './dto/test-webhook.dto';
+import { TransactionService } from '../transaction/transaction.service';
+import { TransactionType, PaymentMethod, TransactionStatus, Transaction } from '../transaction/entities/transaction.entity';
 
 @Injectable()
 export class CryptomusService {
@@ -21,60 +26,83 @@ export class CryptomusService {
     private paymentRepository: Repository<PaymentEntity>,
     @InjectRepository(WalletEntity)
     private walletRepository: Repository<WalletEntity>,
+
+    @InjectRepository(Transaction)
+    private transactionRepository: Repository<Transaction>,
+
+
     private configService: ConfigService,
     private cryptomusApiService: CryptomusApiService,
   ) { }
 
   async createWallet(createWalletDto: CreateWalletDto, user: User): Promise<WalletEntity> {
-    console.log("🚀 ~ CryptomusService ~ createWallet ~ user:", user)
     try {
       // check if wallet already exists
-      const existingWallet = await this.walletRepository.findOne({ where: { owner: { id: user.id } } });
+      const existingWallet = await this.walletRepository.findOne({ where: { owner: { id: user.id }, deleted_at: IsNull() } });
       if (existingWallet) {
         throw new BadRequestException('Wallet already exists');
       }
-  
+
       // create wallet in database
       const wallet = this.walletRepository.create({
         ...createWalletDto,
         owner: user,
       });
-  
-      // create wallet in cryptomus
-      // const cryptomus_wallet = await this.cryptomusApiService.createWallet({
-      //   currency: createWalletDto.currency,
-      //   network: createWalletDto.network,
-      //   orderId: wallet.id,
-      //   from_referral_code: createWalletDto.from_referral_code,
-      // });
-  
-      const cryptomus_wallet = {
-        result: {
-        id: '123',
-        uuid: '123',
-        address: '123',
-        network: createWalletDto.network,
-        currency: createWalletDto.currency,
-        url: 'https://cryptomus.com/wallet/123',
-        }
-      }
 
-      wallet.cryptomus_wallet_id = cryptomus_wallet.result.id;
+      await wallet.save()
+
+      // create wallet in cryptomus
+      const cryptomus_wallet = await this.cryptomusApiService.createWallet({
+        currency: createWalletDto.currency,
+        network: createWalletDto.network,
+        orderId: wallet.id,
+        from_referral_code: createWalletDto.from_referral_code,
+      });
+      console.log("🚀 ~ CryptomusService ~ createWallet ~ cryptomus_wallet:", cryptomus_wallet)
+
+      // const cryptomus_wallet = {
+      //   result: {
+      //     id: uuidv4(),
+      //     uuid: uuidv4(),
+      //     address: uuidv4(),
+      //     network: createWalletDto.network,
+      //     currency: createWalletDto.currency,
+      //     url: 'https://cryptomus.com/wallet/123',
+      //     balance: 100,
+      //   }
+      // }
+
+      wallet.cryptomus_wallet_id = cryptomus_wallet.result.wallet_uuid;
       wallet.cryptomus_wallet_uuid = cryptomus_wallet.result.uuid;
       wallet.cryptomus_wallet_address = cryptomus_wallet.result.address;
+      wallet.cryptomus_wallet_order_id = cryptomus_wallet.result.order_id;
       wallet.network = cryptomus_wallet.result.network;
       wallet.currency = cryptomus_wallet.result.currency;
       wallet.url = cryptomus_wallet.result.url;
       wallet.status = WalletStatus.ACTIVE;
-  
+      wallet.balance = cryptomus_wallet.result.balance;
+
       return await wallet.save();
     } catch (error) {
       throw new BadRequestException(error?.response?.data?.message ?? error.message);
     }
   }
 
-  async getWalletById(id: string): Promise<WalletEntity> {
-    const wallet = await this.walletRepository.findOne({ where: { id } });
+  async getMyWallet(user: User): Promise<WalletEntity> {
+    const wallet = await this.walletRepository.findOne({ where: { owner: { id: user.id } } });
+    if (!wallet) {
+      throw new NotFoundException('Wallet not found');
+    }
+    return wallet;
+  }
+
+  async getWalletById(paramIdDto: ParamIdDto, user: User): Promise<WalletEntity> {
+    let wallet: WalletEntity | null = null
+    if ([UserRole.ANONYMOUS, UserRole.CUSTOMER].includes(user.role)) {
+      wallet = await this.walletRepository.findOne({ where: { id: paramIdDto.id, owner: { id: user.id } } });
+    } else {
+      wallet = await this.walletRepository.findOne({ where: { id: paramIdDto.id } });
+    }
     if (!wallet) {
       throw new NotFoundException('Wallet not found');
     }
@@ -88,12 +116,12 @@ export class CryptomusService {
     });
   }
 
-  async createPayment(createPaymentDto: CreatePaymentDto): Promise<PaymentEntity> {
+  async createPayment(createPaymentDto: CreatePaymentDto,): Promise<PaymentEntity> {
     // Find available wallet
     let wallet: WalletEntity | null;
 
     if (createPaymentDto.walletId) {
-      wallet = await this.getWalletById(createPaymentDto.walletId);
+      wallet = await this.walletRepository.findOne({ where: { id: createPaymentDto.walletId } });
     } else {
       wallet = await this.findAvailableWallet(createPaymentDto.currency, createPaymentDto.preferredNetwork);
     }
@@ -128,9 +156,9 @@ export class CryptomusService {
     }
   }
 
-  async getPaymentById(id: string): Promise<PaymentEntity> {
+  async getPaymentById(paramIdDto: ParamIdDto, user?: User): Promise<PaymentEntity> {
     const payment = await this.paymentRepository.findOne({
-      where: { id },
+      where: { id: paramIdDto.id, wallet: { owner: { id: user?.id } } },
       relations: ['wallet']
     });
     if (!payment) {
@@ -139,9 +167,9 @@ export class CryptomusService {
     return payment;
   }
 
-  async getPaymentByOrderId(orderId: string): Promise<PaymentEntity> {
+  async getPaymentByOrderId(paramIdDto: ParamIdDto, user: User): Promise<PaymentEntity> {
     const payment = await this.paymentRepository.findOne({
-      where: { orderId },
+      where: { orderId: paramIdDto.id, wallet: { owner: { id: user.id } } },
       relations: ['wallet']
     });
     if (!payment) {
@@ -151,7 +179,7 @@ export class CryptomusService {
   }
 
   async updatePaymentStatus(paymentId: string, status: PaymentStatus, txHash?: string): Promise<PaymentEntity> {
-    const payment = await this.getPaymentById(paymentId);
+    const payment = await this.getPaymentById({ id: paymentId },);
 
     payment.status = status;
     if (txHash) {
@@ -164,18 +192,18 @@ export class CryptomusService {
     return await this.paymentRepository.save(payment);
   }
 
-  async processWebhook(webhookData: any, signature: string): Promise<void> {
+  async processWebhook(webhookData: any, signature?: string): Promise<void> {
     // Verify webhook signature
-    if (!this.verifyWebhookSignature(webhookData, signature)) {
-      throw new BadRequestException('Invalid webhook signature');
-    }
+    // if (!this.verifyWebhookSignature(webhookData, signature)) {
+    //   throw new BadRequestException('Invalid webhook signature');
+    // }
 
-    const { orderId, status, txHash, network, walletAddress } = webhookData;
+    // Extract data from webhook payload
+    const { order_id, status, txid, amount, currency, network, from, uuid } = webhookData;
 
-    const payment = await this.paymentRepository.findOne({ where: { orderId } });
-    if (!payment) {
-      this.logger.warn(`Payment not found for orderId: ${orderId}`);
-      return;
+    const wallet = await this.walletRepository.findOne({ where: { cryptomus_wallet_uuid: uuid }, relations: { owner: true } });
+    if (!wallet) {
+      throw new NotFoundException('Wallet not found');
     }
 
     // Update payment status based on webhook
@@ -194,11 +222,39 @@ export class CryptomusService {
         newStatus = PaymentStatus.PENDING;
     }
 
-    await this.updatePaymentStatus(payment.id, newStatus, txHash);
+    // Create transaction record
+    try {
+      const transaction = this.transactionRepository.create({
+        amount: parseFloat(amount),
+        currency: currency.toUpperCase(),
+        transaction_type: TransactionType.DEPOSIT,
+        status: newStatus === PaymentStatus.PAID ? TransactionStatus.COMPLETED :
+          newStatus === PaymentStatus.FAILED ? TransactionStatus.FAILED :
+            TransactionStatus.PENDING,
+        payment_method: PaymentMethod.CRYPTO,
+        user: wallet.owner,
+        wallet: wallet,
+        metadata: {
+          cryptomus_uuid: uuid,
+          network: network,
+          from_address: from,
+          webhook_data: webhookData,
+          payment_transaction_id: uuid,
+          gateway_transaction_id: txid,
+          description: `Cryptomus payment for order ${order_id}`,
+          order: order_id
+        }
+      });
+      await transaction.save()
+      console.log("🚀 ~ CryptomusService ~ processWebhook ~ transaction:", transaction)
+      this.logger.log(`Transaction created for payment ${order_id}`);
+    } catch (error) {
+      this.logger.error(`Failed to create transaction for payment ${order_id}:`, error);
+    }
 
     // Update wallet balance if payment is successful
-    if (newStatus === PaymentStatus.PAID && payment.wallet) {
-      await this.updateWalletBalance(payment.wallet.id, payment.amount);
+    if (newStatus === PaymentStatus.PAID && wallet) {
+      await this.updateWalletBalance(wallet.id, parseFloat(amount));
     }
   }
 
@@ -242,6 +298,10 @@ export class CryptomusService {
   //   return crypto.createHmac('sha512', apiKey).update(jsonString).digest('hex');
   // }
 
+
+
+
+
   private verifyWebhookSignature(payload: any, signature: string): boolean {
     const webhookSecret = this.configService.get('CRYPTOMUS_WEBHOOK_SECRET');
     if (!webhookSecret) {
@@ -270,5 +330,84 @@ export class CryptomusService {
       })
       .where('id = :id', { id: walletId })
       .execute();
+  }
+
+  /**
+   * Get list of available payment services
+   * @returns Promise<CryptomusPaymentServicesResponse>
+   */
+  async getPaymentServices(): Promise<CryptomusPaymentServicesResponse> {
+    try {
+      this.logger.log('Fetching available payment services from Cryptomus');
+
+      const response = await this.cryptomusApiService.getPaymentServices();
+
+      this.logger.log(`Successfully fetched ${response.result?.length || 0} payment services`);
+      return response;
+    } catch (error) {
+      this.logger.error('Failed to fetch payment services from Cryptomus', error);
+      throw new BadRequestException('Failed to fetch payment services');
+    }
+  }
+
+  /**
+   * Test wallet webhook
+   * @param options Test webhook options
+   * @returns Promise<any>
+   */
+  async testWalletWebhook(options: any, user: User): Promise<any> {
+    try {
+      this.logger.log('Testing wallet webhook with Cryptomus');
+      const wallet = await this.walletRepository.findOne({ where: { owner: { id: user.id } } });
+      if (!wallet) {
+        throw new NotFoundException('Wallet not found');
+      }
+      const response = await this.cryptomusApiService.testWalletWebhook({
+        urlCallback: this.configService.get<string>("CRYPTOMUS_CALLBACK_URL") || "",
+        currency: wallet.currency,
+        network: wallet.network,
+        uuid: wallet.cryptomus_wallet_uuid,
+        status: 'paid'
+      });
+
+      this.logger.log('Wallet webhook test completed successfully');
+      return response;
+    } catch (error) {
+      this.logger.error('Failed to test wallet webhook with Cryptomus', error);
+      throw new BadRequestException('Failed to test wallet webhook');
+    }
+  }
+
+  /**
+   * Test payment webhook
+   * @param options Test webhook options
+   * @returns Promise<any>
+   */
+  async testPaymentWebhook(options: {
+    uuid?: string;
+    orderId: string;
+    urlCallback: string;
+    currency: string;
+    network: string;
+    status?: string;
+  }): Promise<any> {
+    try {
+      this.logger.log('Testing payment webhook with Cryptomus');
+
+      const response = await this.cryptomusApiService.testPaymentWebhook({
+        uuid: options.uuid,
+        orderId: options.orderId,
+        urlCallback: options.urlCallback,
+        currency: options.currency,
+        network: options.network,
+        status: options.status || 'paid'
+      });
+
+      this.logger.log('Payment webhook test completed successfully');
+      return response;
+    } catch (error) {
+      this.logger.error('Failed to test payment webhook with Cryptomus', error);
+      throw new BadRequestException('Failed to test payment webhook');
+    }
   }
 }

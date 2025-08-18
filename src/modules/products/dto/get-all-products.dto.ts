@@ -8,14 +8,14 @@ import {
   Max,
   IsEnum,
 } from 'class-validator';
-import { ProductStatus, providers } from '../entities/product.entity';
+import { ProductStatus, ProxiesProvider } from '../entities/product.entity';
 import { GetAllDto } from 'src/shared/dtos/getAll.dto';
 
 export class GetAllProductsDto extends GetAllDto {
 
   @IsOptional()
-  @IsEnum(providers)
-  provider?: providers;
+  @IsEnum(ProxiesProvider)
+  provider?: ProxiesProvider;
 
   @IsOptional()
   @IsEnum(ProductStatus)

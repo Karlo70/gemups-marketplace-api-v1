@@ -43,9 +43,8 @@ export class WebhooksController {
     @Req() req: Request,
     @Res() res: Response,
     @Body() body: any) {
-    console.log(body);
+    await this.webhooksService.handleWalletWebhook(body);
     return res.status(200).send('webhook received');
-
   }
 
 }

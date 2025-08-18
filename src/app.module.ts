@@ -22,6 +22,8 @@ import { SevenElevenProxiesModule } from './modules/seven-eleven-proxies/seven-e
 import { CartModule } from './modules/cart/cart.module';
 import { TransactionModule } from './modules/transaction/transaction.module';
 import { ProxySellerProxiesModule } from './modules/proxy-seller-proxies/proxy-seller-proxies.module';
+import { SettingModule } from './modules/setting/setting.module';
+import { ProxiesModule } from './modules/proxies/proxies.module';
 
 @Module({
   imports: [
@@ -78,6 +80,8 @@ import { ProxySellerProxiesModule } from './modules/proxy-seller-proxies/proxy-s
     CartModule,
     TransactionModule,
     ProxySellerProxiesModule,
+    SettingModule,
+    ProxiesModule,
   ],
   controllers: [AppController],
   providers: [

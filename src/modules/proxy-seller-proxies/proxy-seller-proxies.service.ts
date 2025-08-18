@@ -24,8 +24,8 @@ import {
 } from './interfaces/proxy-seller-api.interface';
 
 @Injectable()
-export class ProxySellerProxiesService {
-  private readonly logger = new Logger(ProxySellerProxiesService.name);
+export class ProxySellerService {
+  private readonly logger = new Logger(ProxySellerService.name);
   private readonly baseUrl: string;
   private readonly apiKey: string;
   private readonly testMode: boolean;

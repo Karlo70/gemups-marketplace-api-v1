@@ -39,6 +39,7 @@ export class TransactionService {
     const queryBuilder = this.transactionRepository.createQueryBuilder('transaction')
       .leftJoinAndSelect('transaction.user', 'user')
       .leftJoinAndSelect('transaction.order', 'order')
+      .leftJoinAndSelect('transaction.proxy', 'proxy')
       .orderBy('transaction.created_at', 'DESC');
 
     // Apply filters
@@ -93,7 +94,7 @@ export class TransactionService {
   async findOne(id: string): Promise<Transaction> {
     const transaction = await this.transactionRepository.findOne({
       where: { id },
-      relations: ['user', 'order'],
+      relations: ['user', 'order', 'proxy'],
     });
 
     if (!transaction) {

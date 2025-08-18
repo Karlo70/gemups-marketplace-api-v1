@@ -2,9 +2,9 @@ import { Injectable, Logger, BadRequestException, UnauthorizedException, HttpExc
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import { CreateSevenElevenProxyDto } from './dto/create-seven-eleven-proxy.dto';
+import { CreateOrderDto, CreateSevenElevenProxyDto } from './dto/create-seven-eleven-proxy.dto';
 import { UpdateSevenElevenProxyDto } from './dto/update-seven-eleven-proxy.dto';
-import { 
+import {
   TokenResponse,
   EnterpriseBalanceResponse,
   OrderResponse,
@@ -16,6 +16,7 @@ import {
   WhitelistInfoResponse,
   StatementResponse
 } from './interfaces/711proxy-api.interface';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class SevenElevenProxiesService {
@@ -33,12 +34,12 @@ export class SevenElevenProxiesService {
     private configService: ConfigService,
     private httpService: HttpService,
   ) {
-    this.baseUrl = this.configService.get<string>('711PROXY.BASEURL') || 'https://server.711proxy.com';
-    this.username = this.configService.get<string>('711PROXY.USERNAME') || '';
-    this.password = this.configService.get<string>('711PROXY.PASSWORD') || '';
-    this.timeout = this.configService.get<number>('711PROXY.TIMEOUT') || 30000;
-    this.retryAttempts = this.configService.get<number>('711PROXY.RETRY_ATTEMPTS') || 3;
-    this.retryDelay = this.configService.get<number>('711PROXY.RETRY_DELAY') || 1000;
+    this.baseUrl = this.configService.get<string>('SEVEN_ELEVEN_BASE_URL') || 'https://server.711proxy.com';
+    this.username = this.configService.get<string>('SEVEN_ELEVEN_USER_NAME') || '';
+    this.password = this.configService.get<string>('SEVEN_ELEVEN_PASSWORD') || '';
+    this.timeout = this.configService.get<number>('SEVEN_ELEVEN_TIMEOUT') || 30000;
+    this.retryAttempts = this.configService.get<number>('SEVEN_ELEVEN_RETRY_ATTEMPTS') || 3;
+    this.retryDelay = this.configService.get<number>('SEVEN_ELEVEN_RETRY_DELAY') || 1000;
   }
 
   // ==================== AUTHENTICATION ====================
@@ -50,8 +51,8 @@ export class SevenElevenProxiesService {
   async getToken(username?: string, password?: string): Promise<string> {
     try {
       const authData = {
-        username: username || this.username,
-        passwd: password || this.password,
+        username: username ?? this.username,
+        passwd: password ?? this.password,
       };
 
       if (!authData.username || !authData.passwd) {
@@ -69,7 +70,7 @@ export class SevenElevenProxiesService {
         )
       );
 
-      if (response.data.code === 0 && response.data.results?.token) {
+      if (response.data.code === 200 && response.data.results?.token) {
         this.authToken = response.data.results.token;
         this.tokenExpiry = Date.now() + (24 * 60 * 60 * 1000); // 24 hours
         this.logger.log('Successfully obtained authentication token');
@@ -104,16 +105,16 @@ export class SevenElevenProxiesService {
    */
   async getEnterpriseBalance(): Promise<EnterpriseBalanceResponse> {
     try {
-      const token = await this.ensureValidToken();
-      
+      const token = await this.getToken();
+
       const response = await firstValueFrom(
         this.httpService.get<EnterpriseBalanceResponse>(
           `${this.baseUrl}/eapi/balance/`,
           {
             timeout: this.timeout,
-            headers: { 
+            headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json' 
+              'Content-Type': 'application/json'
             },
           }
         )
@@ -139,32 +140,44 @@ export class SevenElevenProxiesService {
    * Create Order - POST
    * Create a new proxy order
    */
-  async createOrder(orderData: any): Promise<OrderResponse> {
+  async createOrder(orderData: CreateOrderDto): Promise<OrderResponse> {
+    console.log("🚀 ~ SevenElevenProxiesService ~ createOrder ~ orderData:", orderData)
     try {
-      const token = await this.ensureValidToken();
-      
+      const token = await this.getToken();
+
+      const order_data: CreateOrderDto = {
+        expire: orderData.expire,
+        flow: orderData.flow,
+        host: "global.rotgb.711proxy.com",
+      }
+
       const response = await firstValueFrom(
         this.httpService.post<OrderResponse>(
           `${this.baseUrl}/eapi/order/`,
-          orderData,
+          order_data,
           {
-            timeout: this.timeout,
-            headers: { 
+            headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json' 
+              'Content-Type': 'application/json'
             },
           }
         )
       );
 
-      if (response.data.code === 0) {
-        this.logger.log(`Successfully created order: ${response.data.results?.orderNo}`);
+      if (response.data.code === 200) {
+        this.logger.log(`Successfully created order: ${response.data.results?.['order_no']}`);
         return response.data;
+      } else if (response.data.code === 41001) {
+        console.log("🚀 ~ SevenElevenProxiesService ~ createOrder ~ response.data:", response.data)
+        throw new BadRequestException(response.data || 'Failed to create order');
       } else {
         throw new BadRequestException(response.data.message || 'Failed to create order');
       }
     } catch (error) {
       this.logger.error('Failed to create order', error);
+      if (error.code === 41001) {
+        throw new BadRequestException(error.response?.data || 'Failed to create order');
+      }
       throw new HttpException(
         error.response?.data?.message || 'Failed to create order',
         error.response?.status || HttpStatus.BAD_REQUEST
@@ -178,22 +191,25 @@ export class SevenElevenProxiesService {
    */
   async getOrderStatus(orderNo: string): Promise<OrderStatusResponse> {
     try {
-      const token = await this.ensureValidToken();
-      
+      const token = await this.getToken();
+
       const response = await firstValueFrom(
         this.httpService.get<OrderStatusResponse>(
-          `${this.baseUrl}/eapi/order/${orderNo}/`,
+          `${this.baseUrl}/eapi/order/`,
           {
             timeout: this.timeout,
-            headers: { 
+            headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json' 
+              'Content-Type': 'application/json'
+            },
+            params: {
+              order_no: orderNo
             },
           }
         )
       );
 
-      if (response.data.code === 0) {
+      if (response.data.code === 200) {
         return response.data;
       } else {
         throw new BadRequestException(response.data.message || 'Failed to get order status');
@@ -213,17 +229,17 @@ export class SevenElevenProxiesService {
    */
   async applyRestitutionOrder(orderNo: string, reason: string): Promise<RestitutionOrderResponse> {
     try {
-      const token = await this.ensureValidToken();
-      
+      const token = await this.getToken();
+
       const response = await firstValueFrom(
         this.httpService.post<RestitutionOrderResponse>(
           `${this.baseUrl}/eapi/restitution/`,
           { orderNo, reason },
           {
             timeout: this.timeout,
-            headers: { 
+            headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json' 
+              'Content-Type': 'application/json'
             },
           }
         )
@@ -252,17 +268,17 @@ export class SevenElevenProxiesService {
    */
   async changeUserPassStatus(username: string, status: boolean): Promise<UserPassStatusResponse> {
     try {
-      const token = await this.ensureValidToken();
-      
+      const token = await this.getToken();
+
       const response = await firstValueFrom(
         this.httpService.post<UserPassStatusResponse>(
           `${this.baseUrl}/eapi/userpass/`,
           { username, status },
           {
             timeout: this.timeout,
-            headers: { 
+            headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json' 
+              'Content-Type': 'application/json'
             },
           }
         )
@@ -291,17 +307,17 @@ export class SevenElevenProxiesService {
    */
   async createAllocationOrder(allocationData: any): Promise<AllocationOrderResponse> {
     try {
-      const token = await this.ensureValidToken();
-      
+      const token = await this.getToken();
+
       const response = await firstValueFrom(
         this.httpService.post<AllocationOrderResponse>(
           `${this.baseUrl}/eapi/allocation/`,
           allocationData,
           {
             timeout: this.timeout,
-            headers: { 
+            headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json' 
+              'Content-Type': 'application/json'
             },
           }
         )
@@ -330,17 +346,17 @@ export class SevenElevenProxiesService {
    */
   async addToWhitelist(ip: string, description?: string): Promise<WhitelistResponse> {
     try {
-      const token = await this.ensureValidToken();
-      
+      const token = await this.getToken();
+
       const response = await firstValueFrom(
         this.httpService.post<WhitelistResponse>(
           `${this.baseUrl}/eapi/whitelist/`,
           { ip, description },
           {
             timeout: this.timeout,
-            headers: { 
+            headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json' 
+              'Content-Type': 'application/json'
             },
           }
         )
@@ -367,17 +383,17 @@ export class SevenElevenProxiesService {
    */
   async getWhitelistInfo(ip?: string): Promise<WhitelistInfoResponse> {
     try {
-      const token = await this.ensureValidToken();
-      
+      const token = await this.getToken();
+
       const response = await firstValueFrom(
         this.httpService.post<WhitelistInfoResponse>(
           `${this.baseUrl}/eapi/whitelist/info/`,
           ip ? { ip } : {},
           {
             timeout: this.timeout,
-            headers: { 
+            headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json' 
+              'Content-Type': 'application/json'
             },
           }
         )
@@ -405,22 +421,22 @@ export class SevenElevenProxiesService {
    */
   async getStatement(startDate?: string, endDate?: string, username?: string): Promise<StatementResponse> {
     try {
-      const token = await this.ensureValidToken();
-      
+      const token = await this.getToken();
+
       const params: any = {};
       if (startDate) params.startDate = startDate;
       if (endDate) params.endDate = endDate;
       if (username) params.username = username;
-      
+
       const response = await firstValueFrom(
         this.httpService.post<StatementResponse>(
           `${this.baseUrl}/eapi/statement/`,
           params,
           {
             timeout: this.timeout,
-            headers: { 
+            headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json' 
+              'Content-Type': 'application/json'
             },
           }
         )
@@ -449,17 +465,15 @@ export class SevenElevenProxiesService {
     try {
       // First authenticate
       const token = await this.getToken(createSevenElevenProxyDto.username, createSevenElevenProxyDto.passwd);
-      
+
       // If proxy creation data is provided, create an order
-      if (createSevenElevenProxyDto.zone && createSevenElevenProxyDto.ptype && createSevenElevenProxyDto.flow) {
+      if (createSevenElevenProxyDto.flow) {
         const orderData = {
-          zone: createSevenElevenProxyDto.zone,
-          ptype: createSevenElevenProxyDto.ptype,
+          expire: createSevenElevenProxyDto.expire || dayjs().add(90, 'day').toISOString(),
           flow: createSevenElevenProxyDto.flow,
-          region: createSevenElevenProxyDto.region,
-          proto: createSevenElevenProxyDto.protocol,
+          host: createSevenElevenProxyDto.host,
         };
-        
+
         const orderResult = await this.createOrder(orderData);
         return {
           message: 'Proxy order created successfully',
@@ -467,7 +481,7 @@ export class SevenElevenProxiesService {
           proxyData: createSevenElevenProxyDto,
         };
       }
-      
+
       return {
         message: 'Authentication successful',
         token,

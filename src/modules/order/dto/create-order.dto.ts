@@ -14,13 +14,29 @@ export class OrderItemDto {
 
   @IsOptional()
   metadata?: Record<string, any>;
+
+  @IsOptional()
+  @IsNumber()
+  countryId?: number; // Country ID for proxy location (e.g., 1 for US)
+
+  @IsOptional()
+  @IsString()
+  periodId?: string; // Period ID for proxy duration (e.g., '30' for 30 days)
+
+  @IsOptional()
+  @IsString()
+  customTargetName?: string; // Custom target name for the proxy order
+
+  @IsOptional()
+  @IsString()
+  coupon?: string; // Coupon code for discount
 }
 
 export class CreateOrderDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => OrderItemDto)
-  items: OrderItemDto[];
+  items: OrderItemDto[]; // Array of order items with product details and proxy configuration
 
   @IsOptional()
   @IsString()

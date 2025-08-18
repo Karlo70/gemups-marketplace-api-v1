@@ -21,6 +21,7 @@ import { WalletEntity } from 'src/modules/cryptomus/entities/wallet.entity';
 import { Order } from 'src/modules/order/entities/order.entity';
 import { Cart } from 'src/modules/cart/entities/cart.entity';
 import { ProxySellerProxy } from 'src/modules/proxy-seller-proxies/entities/proxy-seller-proxy.entity';
+import { Proxy } from 'src/modules/proxies/entities/proxy.entity';
 
 export enum UserRole {
   SUPER_ADMIN = 'super_admin',
@@ -120,6 +121,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => ProxySellerProxy, (proxy) => proxy.owner)
   proxy_seller_proxies: ProxySellerProxy[];
+
+  @OneToMany(() => Proxy, (proxy) => proxy.user)
+  proxies: Proxy[];
 
   @BeforeInsert()
   @BeforeUpdate()

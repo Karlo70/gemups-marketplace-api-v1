@@ -42,3 +42,22 @@ export interface CryptomusErrorResponse {
     message: string;
   };
 }
+
+export interface CryptomusPaymentService {
+  network: string;
+  currency: string;
+  is_available: boolean;
+  limit: {
+    min_amount: string;
+    max_amount: string;
+  };
+  commission: {
+    fee_amount: string;
+    percent: string;
+  };
+}
+
+export interface CryptomusPaymentServicesResponse {
+  state: number;
+  result: CryptomusPaymentService[];
+}

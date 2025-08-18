@@ -35,7 +35,7 @@ export class UsersService {
     private readonly loginAttemptRepository: Repository<LoginAttempt>,
 
     private readonly mediaService: MediaService,
-  ) {}
+  ) { }
 
   async create(createUserDto: CreateUserDto, currentUser: User) {
     const isEmailExist = await this.usersRepository.findOne({
@@ -224,8 +224,19 @@ export class UsersService {
     }
 
     Object.assign(user, updateUserDto);
+    await user.save()
 
-    return user.save();
+    const saved_user = await this.usersRepository.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        cryptomus_wallet: true,
+      },
+    });
+    if (!saved_user) throw new BadRequestException('User not found');
+
+    return saved_user;
   }
 
   async updateTimeZone(
@@ -329,7 +340,7 @@ export class UsersService {
       });
 
     if (currentUser.role !== UserRole.SUPER_ADMIN) {
-        query.andWhere('user.role != :admin', { admin: UserRole.ADMIN });
+      query.andWhere('user.role != :admin', { admin: UserRole.ADMIN });
     }
 
     const result = await query.getRawOne();

@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsNumber, IsBoolean, IsArray } from 'class-validator';
+import { IsString, IsOptional, IsNumber, IsBoolean, IsArray, IsDate, IsDateString } from 'class-validator';
 
 // Base DTO for authentication
 export class AuthDto {
@@ -11,26 +11,17 @@ export class AuthDto {
 
 // DTO for creating orders
 export class CreateOrderDto {
+    
   @IsString()
-  zone: string;
+  flow: string;
 
-  @IsNumber()
-  ptype: number;
-
-  @IsNumber()
-  flow: number;
+  @IsOptional()
+  @IsDateString()
+  expire?: string;
 
   @IsOptional()
   @IsString()
-  region?: string;
-
-  @IsOptional()
-  @IsString()
-  proto?: string;
-
-  @IsOptional()
-  @IsString()
-  stype?: string;
+  host?: string;
 }
 
 // DTO for getting order status
@@ -128,12 +119,12 @@ export class CreateSevenElevenProxyDto extends AuthDto {
   zone?: string;
 
   @IsOptional()
-  @IsNumber()
+  @IsString()
   ptype?: number;
 
   @IsOptional()
-  @IsNumber()
-  flow?: number;
+  @IsString()
+  flow?: string;
 
   @IsOptional()
   @IsString()
@@ -148,6 +139,6 @@ export class CreateSevenElevenProxyDto extends AuthDto {
   host?: string;
 
   @IsOptional()
-  @IsString()
+  @IsDateString()
   expire?: string;
 }

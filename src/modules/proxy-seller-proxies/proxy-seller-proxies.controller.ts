@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Request } from '@nestjs/common';
-import { ProxySellerProxiesService } from './proxy-seller-sub-user-proxies.service';
+import { ProxySellerUserProxiesService } from './proxy-seller-sub-user-proxies.service';
 import { CreateProxySellerProxyDto } from './dto/create-proxy-seller-proxy.dto';
 import { UpdateProxySellerProxyDto } from './dto/update-proxy-seller-proxy.dto';
 import { GetProxiesDto } from './dto/get-proxies.dto';
@@ -11,7 +11,7 @@ import { ParamIdDto } from 'src/shared/dtos/paramId.dto';
 @Controller('proxy-seller-proxies')
 @UseGuards(AuthenticationGuard, RolesGuard)
 export class ProxySellerProxiesController {
-  constructor(private readonly proxySellerProxiesService: ProxySellerProxiesService) { }
+  constructor(private readonly proxySellerProxiesService: ProxySellerUserProxiesService) { }
 
   // ==================== LOCAL PROXY MANAGEMENT ====================
 
